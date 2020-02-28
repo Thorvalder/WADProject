@@ -51,7 +51,7 @@ class Artist(models.Model):
     TOTAL_REVIEWS = models.IntegerField(default = 0)
     PROFILE_PICTURE = models.ImageField(upload_to='profile_images', blank=True)
     FULL_NAME = models.CharField(max_length=40)
-    CONTACT_DETAILS = models.CharField(max_length=80, unique=True)
+    CONTACT_DETAILS = models.CharField(max_length=80)
     STYLE = models.CharField(max_length = 20, choices = STYLE_CHOICES)
 
     class Meta:

@@ -3,14 +3,17 @@ from rango import views
 app_name = 'rango'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('about/', views.about, name='about'),
-   # path('category/<slug:artist_name_slug>/',
-         #views.show_artist, name='show_artist'),
-    #path('add_category/', views.add_artist, name='add_artist'),
-    #path('category/<slug:artist_name_slug>/add_page/', views.add_review, name = 'add_review'),
-    #path('register/', views.register, name='register'),
-    #path('login/', views.user_login, name='login'),
-    #path('restricted/', views.restricted, name='restricted'),
-    #path('logout/', views.user_logout, name='logout'),
+    path('home/', views.index, name='home'),
+    path('login/', views.login, name='login'),
+    path('my-account/', views.show_account, name='show_account'),
+    path('my-account/saved-artists/', views.show_saved, name='show_saved'),
+    path('sign-up/', views.sign_up, name='sign_up'),
+    path('sign-up/customer-sign-up/', views.register_customer, name='add_customer'),
+    path('sign-up/artist-sign-up/', views.register_artist, name='add_artist'),
+    path('artists/', views.artists, name='artists'),
+    path('artists/<ARTIST_USERNAME>/', views.show_artist, name='show_artist'),
+    path('artists/<ARTIST_USERNAME>/reviews/', views.show_reviews, name='show_reviews'),
+    path('artists/<ARTIST_USERNAME>/reviews/add-a-review', views.add_review, name='add_review'),
+    path('logout/', views.user_logout, name='logout'),
 
 ]
