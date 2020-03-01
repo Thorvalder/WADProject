@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import sys
+sys.path.append('../')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -57,6 +59,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Custom Backend Authentication
+            
+#CUSTOM_BACKEND = os.path.join(BASE_DIR, 'rango\\backends.py')
+#AUTH_USER_MODEL = 'rango.Customer'
+
+#AUTHENTICATION_BACKENDS = ('rango.backends.Customer_Artist_Backend',
+#                           'django.contrib.auth.backends.ModelBackend',)
+
 
 ROOT_URLCONF = 'tango_with_django_project.urls'
 

@@ -2,13 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from rango.models import Customer
-from rango.models import Artist
-from rango.models import Review
+from rango.models import Customer,Artist,Review,Saves,Picture
 from rango.forms import CustomerForm, ArtistForm, ReviewForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from datetime import datetime
+#from django.contrib.auth.hashers import set_password
+
 
 def index(request):
     top_artist_list = Artist.objects.order_by('-RATING')[:5]
@@ -19,23 +19,51 @@ def index(request):
     return response
 
 
-def login(request):
+def login_user(request):
     if request.method == 'POST':
-        USERNAME = request.POST.get('USERNAME',0)
-        PASSWORD = request.POST.get('PASSWORD')
-        if USERNAME == 0:
-            ARTIST_USERNAME = request.POST.get('ARTIST_USERNAME')
-            user = authenticate(ARTIST_USERNAME=ARTIST_USERNAME, PASSWORD=PASSWORD)
-        else:
-            user = authenticate(USERNAME=USERNAME, PASSWORD=PASSWORD)
+        try:
+            usertype = 'customer'
+            USERNAME = request.POST.get('username')
+            PASSWORD = request.POST.get('password')
+            print(PASSWORD)
+            print("trying to auth customer")
+            user = authenticate(username=USERNAME, password=PASSWORD)
+            print("authed customer")
+        except:
+            print('bad login')
             
 
         if user:
-            if user.is_active:
-                login(request,user)
-                return redirect(reverse('rango:index'))
+            print(user.password)
+            login(request, user)
+            context_dict = {}
+            try:
+                u = Customer.objects.get(USERNAME=user.username)
+                usertype='customer'
+            except:
+                usertype='artist'
+            if usertype == 'customer':
+                u = Customer.objects.get(USERNAME=USERNAME)
+                context_dict['USERTYPE'] = usertype
+                context_dict['USERNAME'] = u.USERNAME
+                #context_dict['PASSWORD'] = user.get_password()
+                context_dict['PROFILE_PICTURE'] = u.PROFILE_PICTURE
             else:
-                return HttpResponse("Your Rango account is disabled.")
+                u = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
+                context_dict['ARTIST_USERNAME'] = u.ARTIST_USERNAME
+                #context_dict['PASSWORD'] = user.get_password()
+                context_dict['ADDRESS'] = u.ADDRESS
+                context_dict['PROFILE_PICTURE'] = u.PROFILE_PICTURE
+                context_dict['FULL_NAME'] = u.FULL_NAME
+                context_dict['CONTACT_DETAILS'] = u.CONTACT_DETAILS
+                context_dict['STYLE_1'] = u.STYLE_1
+                context_dict['STYLE_2'] = u.STYLE_2
+                context_dict['STYLE_3'] = u.STYLE_3
+                
+                
+            response = render(request, 'rango/my-account.html', context=context_dict)
+            return response
+            
         else:
             print(f"Invalid login details")
             return HttpResponse("Invalid login details supplied.")
@@ -51,8 +79,6 @@ def user_logout(request):
 
 
 def show_account(request, USERNAME):
-    # Create a context dictionary which we can pass
-    # to the template rendering engine.
     context_dict = {}
     try:
         customer = Customer.objects.get(USERNAME = USERNAME)
@@ -72,10 +98,15 @@ def new_saved_cookie_handler(request, ARTIST_USERNAME, response):
     saved += ARTIST_USERNAME + '~'
     response.set_cookie('saved', saved)
 
-def show_saved(request, account):
+def show_saved(request):
+    USERNAME = request.user.username
     context_dict = {}
-    context_dict['account'] = account
-    context_dict['saved'] = request.COOKIES.get('saved', '')
+    customer = Customer.objects.get(USERNAME = USERNAME)
+    saves = Saves.objects.filter(CUSTOMER=customer)
+    
+    context_dict['account'] = customer
+    context_dict['saves'] = saves
+    print(saves)
     
     return render(request, 'rango/saved-artists.html', context=context_dict)
 
@@ -203,9 +234,17 @@ def register_customer(request):
         if customer_form.is_valid():
             # Save the user's form data to the database.
             customer = customer_form.save()
-            # Now we hash the password with the set_password method.
+            # Now we hash the PASSWORD with the set_PASSWORD method.
             # Once hashed, we can update the user object.
-            customer.set_password(customer.PASSWORD)
+            customer.PASSWORD= PASSWORD
+            user = User.objects.get_or_create(username=customer.USERNAME,password=customer.PASSWORD)
+            user.password = user.set_password(password)
+            user.save()
+            if 'PROFILE_PICTURE' in request.FILES:
+                customer.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
+            else:
+                customer.PROFILE_PICTURE =  'default.jpg'
+                
             customer.save()
 
             registered = True
@@ -239,9 +278,17 @@ def register_artist(request):
         if artist_form.is_valid():
             # Save the user's form data to the database.
             artist = artist_form.save()
-            # Now we hash the password with the set_password method.
+            # Now we hash the PASSWORD with the set_PASSWORD method.
             # Once hashed, we can update the user object.
-            artist.set_password(artist.PASSWORD)
+            artist.PASSWORD = PASSWORD
+            user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)
+            user.password = user.set_password(password)
+            user.save()
+
+            if 'PROFILE_PICTURE' in request.FILES:
+                artist.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
+            else:
+                artist.PROFILE_PICTURE =  'default.jpg'
             artist.save()
 
             registered = True

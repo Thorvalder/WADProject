@@ -3,8 +3,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'tango_with_django_project.settings')
 import django 
 django.setup()
-from rango.models import Customer, Review, Artist
+from rango.models import Customer, Review, Artist,Picture,Saves
+#from django.contrib.auth.hashers import set_password
+from django.contrib.auth.models import User
 from datetime import date
+from random import randint
 
 def populate(): 
     # First, we will create lists of dictionaries containing the pages
@@ -60,70 +63,70 @@ def populate():
          'ADDRESS':'Glasgow,The Mitchell Library',
          'FULL_NAME':'John Doe',
          'CONTACT_DETAILS':'JDOE123@tattoo.com',
-         'STYLE':1,
+         'STYLE_1':'Nature',
         },
         {'ARTIST_USERNAME':'JDOE456',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,SEC Centre',
          'FULL_NAME':'Jane Doe',
          'CONTACT_DETAILS':'JDOE456@tattoo.com',
-         'STYLE':2,
+         'STYLE_1':'Cartoon',
         },
         {'ARTIST_USERNAME':'MJAK789',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,Hunterian Art Gallery',
          'FULL_NAME':'Mark Jackson',
          'CONTACT_DETAILS':'MJAK789@tattoo.com',
-         'STYLE':3,
+         'STYLE_1':'Abstract',
         },
         {'ARTIST_USERNAME':'FNIE123',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,University of Glasgow',
          'FULL_NAME':'Fraser Niel',
          'CONTACT_DETAILS':'FNIE123@tattoo.com',
-         'STYLE':4,
+         'STYLE_1':'Geometric',
         },
         {'ARTIST_USERNAME':'ZPET456',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,Hilton Glasgow Grosvenor',
          'FULL_NAME':'Zak Peters',
          'CONTACT_DETAILS':'ZPET456@tattoo.com',
-         'STYLE':5,
+         'STYLE_1':'Realism',
         },
         {'ARTIST_USERNAME':'MJOH789',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,West End Post Office',
          'FULL_NAME':'Max Johns',
          'CONTACT_DETAILS':'MJOH789@tattoo.com',
-         'STYLE':6,
+         'STYLE_1':'Tribal',
         },
         {'ARTIST_USERNAME':'ESUE123',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,Bard in the Botanics',
          'FULL_NAME':'Emily Susser',
          'CONTACT_DETAILS':'ESUE123@tattoo.com',
-         'STYLE':7,
+         'STYLE_1':'Sleave',
         },
         {'ARTIST_USERNAME':'SSAM456',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,Glasgow Club Kelvin Hall',
          'FULL_NAME':'Sam Samson',
          'CONTACT_DETAILS':'SSAM456@tattoo.com',
-         'STYLE':8,
+         'STYLE_1':'Writing',
         },
         {'ARTIST_USERNAME':'JHAM789',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,Glasgow University Union',
          'FULL_NAME':'Jack Hammer',
          'CONTACT_DETAILS':'JHAM789@tattoo.com',
-         'STYLE':9,
+         'STYLE_1':'Non-english Writing',
         },
         {'ARTIST_USERNAME':'BDOV123',
          'PASSWORD':'12345',
          'ADDRESS':'Glasgow,University of Glasgow Gift Shop',
          'FULL_NAME':'Ben Dover',
          'CONTACT_DETAILS':'BDOV123@tattoo.com',
-         'STYLE':10,
+         'STYLE_1':'Other',
         }]
 
     revs = [
@@ -241,13 +244,23 @@ def populate():
 ##        for p in Page.objects.filter(category=c):
 ##            print(f'- {c}: {p}')
 
+    for art in arts:
+        add_art(art['ARTIST_USERNAME'],art['PASSWORD'],art['ADDRESS'],art.get('PROFILE_PICTURE','none'),art['FULL_NAME'],art['CONTACT_DETAILS'],art['STYLE_1'])
+
     for cust in custs:
         add_cus(cust['USERNAME'],cust['PASSWORD'],cust.get('PROFILE_PICTURE','none'))
 
+    for art in arts:
+        add_pic(Artist.objects.get(ARTIST_USERNAME = art['ARTIST_USERNAME']),'INKLined_logo.jpg')
+
+    for cust in custs:
+        ca = randint(0,len(arts)-1)
+        add_sav(Customer.objects.get(USERNAME = cust['USERNAME']),Artist.objects.get(ARTIST_USERNAME =arts[ca]['ARTIST_USERNAME']))
+        
+        
+
     counter = 0
 
-    for art in arts:
-        add_art(art['ARTIST_USERNAME'],art['PASSWORD'],art['ADDRESS'],art.get('PROFILE_PICTURE','none'),art['FULL_NAME'],art['CONTACT_DETAILS'],art['STYLE'])
 
     for rev in revs:
         add_rev(Artist.objects.get(ARTIST_USERNAME = rev['ARTIST']['ARTIST_USERNAME']),Customer.objects.get(USERNAME = custs[counter]['USERNAME']),rev['PICTURE'],rev['TITLE'],rev['DESCRIPTION'],rev['RATING'],rev['DATE'])
@@ -259,6 +272,8 @@ def populate():
 def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_DETAILS,STYLE):
     a = Artist.objects.get_or_create(ARTIST_USERNAME=ARTIST_USERNAME)[0]
     a.PASSWORD = PASSWORD
+    print("////////////////////////////////////////////////////////")
+    print(a.PASSWORD)
     a.ADDRESS = ADDRESS
     
     if(PROFILE_PICTURE != 'none'):
@@ -266,8 +281,14 @@ def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_D
         
     a.FULL_NAME = FULL_NAME
     a.CONTACT_DETAILS = CONTACT_DETAILS
-    a.STYLE = STYLE
+    a.STYLE_1 = STYLE
     a.save()
+    user = User.objects.get_or_create(username=a.ARTIST_USERNAME,password=a.PASSWORD)[0]
+    print(user)
+    user.set_password(PASSWORD)
+    user.save()
+    a.PASSWORD=user.password
+    a.save
     return a
 
 def add_cus(USERNAME,PASSWORD,PROFILE_PICTURE):
@@ -275,6 +296,12 @@ def add_cus(USERNAME,PASSWORD,PROFILE_PICTURE):
     c.PASSWORD = PASSWORD
     if(PROFILE_PICTURE != 'none'):
         c.PROFILE_PICTURE = PROFILE_PICTURE
+        
+    c.save()
+    user = User.objects.get_or_create(username=c.USERNAME,password=c.PASSWORD)[0]
+    user.set_password(PASSWORD)
+    user.save()
+    c.PASSWORD=user.password
     c.save()
     return c
 
@@ -296,9 +323,21 @@ def add_rev(a,c, PICTURE, TITLE,DESCRIPTION,RATING,DATE):
         a.RATING = 0
     a.RATING = ((a.RATING*temp)+RATING)/a.TOTAL_REVIEWS
     a.save()
-    
-    
     return r
+
+def add_pic(a,UPLOADED_IMAGE):
+    p = Picture(ARTIST=a,UPLOADED_IMAGE=UPLOADED_IMAGE)
+    p.save()
+    return p
+
+def add_sav(c,a):
+    p = Saves(CUSTOMER=c,ARTIST=a)
+    p.save()
+
+    return p
+
+
+
 
 # Start execution here!
 if __name__ == '__main__':

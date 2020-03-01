@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Customer(models.Model):
     USERNAME_MAX = 30
-    PASSWORD_MAX = 30
+    PASSWORD_MAX = 10000
     USERNAME = models.CharField(max_length=USERNAME_MAX, unique=True)
     PASSWORD = models.CharField(max_length=PASSWORD_MAX)
     PROFILE_PICTURE = models.ImageField(upload_to='profile_images',blank=True)
@@ -42,7 +42,7 @@ class Artist(models.Model):
         (OTHER_STYLE,"Other"),
         )
     USERNAME_MAX = 30
-    PASSWORD_MAX = 30
+    PASSWORD_MAX = 10000
     
     ARTIST_USERNAME = models.CharField(max_length=USERNAME_MAX, unique=True)
     PASSWORD = models.CharField(max_length=PASSWORD_MAX)
@@ -52,7 +52,9 @@ class Artist(models.Model):
     PROFILE_PICTURE = models.ImageField(upload_to='profile_images', blank=True)
     FULL_NAME = models.CharField(max_length=40)
     CONTACT_DETAILS = models.CharField(max_length=80)
-    STYLE = models.CharField(max_length = 20, choices = STYLE_CHOICES)
+    STYLE_1 = models.CharField(max_length = 20, choices = STYLE_CHOICES)
+    STYLE_2 = models.CharField(max_length = 20, choices = STYLE_CHOICES, blank=True)
+    STYLE_3 = models.CharField(max_length = 20, choices = STYLE_CHOICES, blank = True)
 
     class Meta:
         verbose_name_plural = 'Artists'
@@ -81,11 +83,27 @@ class Review(models.Model):
     DATE = models.DateField(null=True)
     
     def __str__(self):
-        return self.ID
+        return str(self.ID)
 
-class Category():
-    name = 'dad'
-class Page():
-    name = 'dad'
+class Picture(models.Model):
+    ID = models.AutoField(auto_created = True,primary_key=True)
+    ARTIST = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    UPLOADED_IMAGE = models.ImageField(upload_to='artist_images', blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Pictures'
+
+    def __str__(self):
+        return str(self.ID)
+
+class Saves(models.Model):
+    CUSTOMER = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    ARTIST = models.ForeignKey(Artist, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Saves'
+
+    def __str__(self):
+        return str(self.CUSTOMER.USERNAME + ' has saved ' +self.ARTIST.ARTIST_USERNAME)
 
 
