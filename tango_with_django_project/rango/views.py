@@ -113,7 +113,7 @@ def show_saved(request):
 def sign_up(request):
     context_dict = {}
 
-    return render(request, 'rango/sign-up.html', context=context_dict)
+    return render(request, 'rango/sign-up-INK.html', context=context_dict)
 
 
 def artists(request):
