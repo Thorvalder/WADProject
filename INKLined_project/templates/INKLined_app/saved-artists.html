@@ -1,0 +1,24 @@
+{% extends 'INKLined_app/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+    <div>
+        <h1>Saves</h1>
+        {% if saves %}
+            <ul>
+                {% for save in saves %}
+                    <li>
+                        <a href="{% url 'INKLined_app:show_artist' save.ARTIST.ARTIST_USERNAME %}"> {{ save.ARTIST.ARTIST_USERNAME }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no saves present.</strong>
+        {% endif %}
+    </div>
+    
+{% endblock %}

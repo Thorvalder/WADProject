@@ -1,0 +1,35 @@
+{% extends 'INKLined_app/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+    <h1>INKLined_app says...</h1> 
+    <div> 
+        {% if user.is_authenticated %} 
+            howdy {{ user.username }}! 
+        {% else %} 
+            hey there partner! 
+        {% endif %}
+        <br /> 
+    </div> 
+    <div>
+        <h2>Popular Artists</h2>
+        {% if top_artists %}
+            <ul>
+                {% for artist in top_artists %}
+                    <li>
+                            <a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> {{ artist.ARTIST_USERNAME }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no artists present.</strong>
+        {% endif %}
+    </div>
+
+
+  
+{% endblock %}

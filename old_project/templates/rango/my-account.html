@@ -1,0 +1,56 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+    <div>
+        <h1>My Details</h1>
+        {% if USERTYPE %}
+            <ul>
+                <li>
+                     Username: {{ USERNAME }}
+                 </li>
+
+                <li>
+                    Profile Picture: {{ PROFILE_PICTURE }}
+                </li>
+                <li>
+                    <a href="/rango/my-account/saved-artists/"> Saved Artists</a>
+                </li>
+            </ul>
+        {% else %}
+            <ul>
+                <li>
+                     Username: {{ USERNAME }}
+                 </li>
+
+                <li>
+                    Profile Picture: {{ PROFILE_PICTURE }}
+                </li>
+                <li>
+                    Address: {{ ADDRESS }}
+                </li>
+                <li>
+                    Full Name: {{ FULLNAME }}
+                </li>
+                <li>
+                    Contact Details: {{ CONTACT_DETAILS }}
+                </li>
+                <li>
+                    Style 1: {{ STYLE_1 }}
+                </li>
+                <li>
+                    Style 2: {{ STYLE_2 }}
+                </li>
+                <li>
+                    Style 3: {{ STYLE_3 }}
+                </li>
+            </ul>
+            {% endif %}
+    </div>
+
+
+{% endblock %}

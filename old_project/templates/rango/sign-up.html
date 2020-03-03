@@ -1,0 +1,19 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Sign-Up
+{% endblock %}
+
+{% block body_block %} 
+    <h1>Sign up page</h1>
+    {% if registered %}
+        Rango says: <strong>thank you for registering!</strong>
+        <a href="{% url 'rango:index' %}">Return to the homepage.</a><br />
+    {% else %} 
+	
+        <a href="{% url 'rango:add_customer' %}">Sign up as a customer</a><br />
+		<a href="{% url 'rango:add_artist' %}">Sign up as an artist</a><br />
+    
+    {% endif %}
+{% endblock %}

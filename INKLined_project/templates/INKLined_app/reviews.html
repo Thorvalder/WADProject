@@ -1,0 +1,32 @@
+{% extends 'INKLined_app/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+    <h1>INKLined_app says...</h1> 
+    <div> 
+        {% if user.is_authenticated %} 
+            howdy {{ user.username }}! 
+        {% else %} 
+            hey there partner! 
+        {% endif %}
+        <br /> 
+    <div>
+        <h2>REVIEWS:</h2>
+
+            {% for review in reviews %}
+                <h3>{{review.TITLE}}</h3>
+                <h4>{{review.CUSTOMER.USERNAME}}</h4>
+                <div>
+                    <img src="{{ MEDIA_URL }}review_images/{{review.PICTURE}}" alt="Picture of a Cat." /> 
+                </div>
+            {% endfor %}
+        
+
+    </div>
+
+
+{% endblock %}
