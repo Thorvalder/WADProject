@@ -60,7 +60,8 @@ def login_user(request):
                 context_dict['STYLE_2'] = u.STYLE_2
                 context_dict['STYLE_3'] = u.STYLE_3
                 
-                
+            #Joseph added next line for css header button:
+            context_dict['pageIsLogin']=True
             response = render(request, 'INKLined_app/my-account.html', context=context_dict)
             return response
             
@@ -68,7 +69,10 @@ def login_user(request):
             print(f"Invalid login details")
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'INKLined_app/login.html')
+        #Joseph added next two lines for css header button:
+        context_dict = {}
+        context_dict['pageIsLogin']=True
+        return render(request, 'INKLined_app/login.html', context=context_dict)
 
 
 
@@ -108,6 +112,8 @@ def show_saved(request):
 
 def sign_up(request):
     context_dict = {}
+    #Joseph added next line for CSS
+    context_dict['pageIsSignUp']=True;
 
     return render(request, 'INKLined_app/sign-up.html', context=context_dict)
 
