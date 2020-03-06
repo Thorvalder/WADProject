@@ -1,0 +1,28 @@
+.twoBoxes{
+	position:fixed;
+	top:30%;
+	left:30%;
+	width:40%;
+	height:40%;
+	text-align:center;
+	background-color:#99d1ff;
+	border:solid;
+	border-color:black;
+	border-radius:30px;
+}
+
+.signUpButton{
+	background-color: white;
+	border: 1px solid #000000;
+	color:black;
+	top:15%;
+	padding: 30px 120px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 20px;
+	margin: 4px 2px;
+	cursor: pointer;
+	position:relative;
+	border-radius:10px;
+}

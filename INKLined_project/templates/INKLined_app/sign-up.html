@@ -6,14 +6,15 @@
 {% endblock %}
 
 {% block body_block %} 
-    <h1>Sign up page</h1>
     {% if registered %}
         INKLined_app says: <strong>thank you for registering!</strong>
         <a href="{% url 'INKLined_app:index' %}">Return to the homepage.</a><br />
     {% else %} 
-	
-        <a href="{% url 'INKLined_app:add_customer' %}">Sign up as a customer</a><br />
-		<a href="{% url 'INKLined_app:add_artist' %}">Sign up as an artist</a><br />
-    
+		<div class="twoBoxes">
+			<a href="{% url 'INKLined_app:add_customer' %}"><div class="signUpButton">Sign up as a customer</div></a>
+			<br />
+			<a href="{% url 'INKLined_app:add_artist' %}"><div class="signUpButton" style="top:20%;">Sign up as an artist</div></a>
+			<br />
+		</div>
     {% endif %}
 {% endblock %}
