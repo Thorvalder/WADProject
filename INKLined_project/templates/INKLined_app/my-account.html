@@ -15,7 +15,10 @@
                  </li>
 
                 <li>
-                    Profile Picture: {{ PROFILE_PICTURE }}
+                    Profile Picture:
+                    <div>
+                        <img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." /> 
+                    </div>
                 </li>
                 <li>
                     <a href="/INKLined_app/my-account/saved-artists/"> Saved Artists</a>

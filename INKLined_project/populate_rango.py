@@ -132,7 +132,7 @@ def populate():
     revs = [
         {
          'ARTIST':arts[0],
-         'PICTURE':'nature-tattoo.jpg',
+         'PICTURE':'review_images/nature-tattoo.jpg',
          'TITLE':'My new flower tattoo!',
          'DESCRIPTION':'Got this last week and I love it. Tulips are the best!',
          'RATING':4,
@@ -140,7 +140,7 @@ def populate():
         },
         {
          'ARTIST':arts[1],
-         'PICTURE':'cartoon-tattoo.jpeg',
+         'PICTURE':'review_images/cartoon-tattoo.jpeg',
          'TITLE':'My new cartoon tattoo!',
          'DESCRIPTION':'Got this last week and I like it. Disney is the best!',
          'RATING':3,
@@ -148,7 +148,7 @@ def populate():
         },
         {
          'ARTIST':arts[2],
-         'PICTURE':'abstract-tattoo.jpg',
+         'PICTURE':'review_images/abstract-tattoo.jpg',
          'TITLE':'My new abstract tattoo!',
          'DESCRIPTION':'Got this last week and I love it. Abstract is the best!',
          'RATING':5,
@@ -156,7 +156,7 @@ def populate():
         },
         {
          'ARTIST':arts[3],
-         'PICTURE':'geometric-tattoo.jpeg',
+         'PICTURE':'review_images/geometric-tattoo.jpeg',
          'TITLE':'My new geometric tattoo!',
          'DESCRIPTION':'Got this last week and I hate it. Shapes are the best!',
          'RATING':1,
@@ -164,7 +164,7 @@ def populate():
         },
         {
          'ARTIST':arts[4],
-         'PICTURE':'realism-tattoo.jpg',
+         'PICTURE':'review_images/realism-tattoo.jpg',
          'TITLE':'My new realism tattoo!',
          'DESCRIPTION':'Got this last week and I like it. Real is the best!',
          'RATING':3,
@@ -172,7 +172,7 @@ def populate():
         },
         {
          'ARTIST':arts[5],
-         'PICTURE':'tribal-tattoo.jpg',
+         'PICTURE':'review_images/tribal-tattoo.jpg',
          'TITLE':'My new tribal tattoo!',
          'DESCRIPTION':'Got this last week and I dislike it. Tribes are the best!',
          'RATING':2,
@@ -180,7 +180,7 @@ def populate():
         },
         {
          'ARTIST':arts[6],
-         'PICTURE':'sleave-tattoo.jpg',
+         'PICTURE':'review_images/sleave-tattoo.jpg',
          'TITLE':'My new sleave tattoo!',
          'DESCRIPTION':'Got this last week and I like it. Arms are the best!',
          'RATING':4,
@@ -188,7 +188,7 @@ def populate():
         },
         {
          'ARTIST':arts[7],
-         'PICTURE':'Tesco-tattoo.jpg',
+         'PICTURE':'review_images/Tesco-tattoo.jpg',
          'TITLE':'My new writing tattoo!',
          'DESCRIPTION':'Got this last week and I love it. Tesco is the best!',
          'RATING':5,
@@ -196,7 +196,7 @@ def populate():
         },
         {
          'ARTIST':arts[8],
-         'PICTURE':'non-english-tattoo.jpg',
+         'PICTURE':'review_images/non-english-tattoo.jpg',
          'TITLE':'My new chinese tattoo!',
          'DESCRIPTION':'Got this last week and I like it. China is the best!',
          'RATING':4,
@@ -204,7 +204,7 @@ def populate():
         },
         {
          'ARTIST':arts[9],
-         'PICTURE':'other-tattoo.jpg',
+         'PICTURE':'review_images/other-tattoo.jpg',
          'TITLE':'My new sword tattoo!',
          'DESCRIPTION':'Got this last week and I like it. Weapons are the best!',
          'RATING':3,
@@ -278,6 +278,8 @@ def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_D
     
     if(PROFILE_PICTURE != 'none'):
         a.PROFILE_PICTURE = PROFILE_PICTURE
+    else:
+        a.PROFILE_PICTURE = 'profile_images/default.jpg'
         
     a.FULL_NAME = FULL_NAME
     a.CONTACT_DETAILS = CONTACT_DETAILS
@@ -287,7 +289,6 @@ def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_D
     print(user)
     user.set_password(PASSWORD)
     user.save()
-    a.PASSWORD=user.password
     a.save
     return a
 
@@ -296,13 +297,13 @@ def add_cus(USERNAME,PASSWORD,PROFILE_PICTURE):
     c.PASSWORD = PASSWORD
     if(PROFILE_PICTURE != 'none'):
         c.PROFILE_PICTURE = PROFILE_PICTURE
+    else:
+        c.PROFILE_PICTURE = 'profile_images/default.jpg'
         
     c.save()
     user = User.objects.get_or_create(username=c.USERNAME,password=c.PASSWORD)[0]
     user.set_password(PASSWORD)
     user.save()
-    c.PASSWORD=user.password
-    c.save()
     return c
 
 def add_rev(a,c, PICTURE, TITLE,DESCRIPTION,RATING,DATE):

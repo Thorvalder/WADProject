@@ -12,7 +12,7 @@ class CustomerForm(forms.ModelForm):
                            help_text="Please enter a username.")
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default_logo.jpg')
+    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
 
     class Meta:
         model = Customer
@@ -27,14 +27,15 @@ class CustomerForm(forms.ModelForm):
 
     def save(self, commit=True):
         customer = super().save(commit=False)
-        customer.set_password(self.cleaned_data["password1"])
+        customer.PASSWORD = self.cleaned_data["password1"]
         if commit:
             customer.save()
+            user = User.objects.get_or_create(username=customer.USERNAME,password=customer.PASSWORD)
         return customer
 
 class CustomerChangeForm(forms.ModelForm):
     PASSWORD = ReadOnlyPasswordHashField(help_text = "Please enter a password")
-    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default_logo.jpg')
+    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
 
     class Meta:
         model = Customer
@@ -56,7 +57,7 @@ class ArtistForm(forms.ModelForm):
     RATING = forms.IntegerField(widget=forms.HiddenInput())
     TOTAL_REVIEWS = forms.IntegerField(widget=forms.HiddenInput(),initial = 0)
     
-    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default_logo.jpg')
+    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
     FULL_NAME = forms.CharField(max_length=40,help_text = "Please enter your full name")
     CONTACT_DETAILS = forms.CharField(max_length=80, help_text="Please enter contact details.")
     NATURE_STYLE = 1
@@ -99,14 +100,17 @@ class ArtistForm(forms.ModelForm):
 
     def save(self, commit=True):
         artist = super().save(commit=False)
-        artist.set_password(self.cleaned_data["password1"])
+        artist.PASSWORD = self.cleaned_data["password1"]
         if commit:
             artist.save()
+            user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)[0]
+            user.password = user.set_password(password)
+            user.save()
         return artist
 
 class ArtistChangeForm(forms.ModelForm):
     PASSWORD = ReadOnlyPasswordHashField(help_text = "Please enter a password")
-    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default_logo.jpg')
+    PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
     FULL_NAME = forms.CharField(max_length=40,help_text = "Please enter your full name")
     CONTACT_DETAILS = forms.CharField(max_length=80, help_text="Please enter contact details.")
     NATURE_STYLE = 1

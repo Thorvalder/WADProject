@@ -7,6 +7,7 @@ from INKLined_app.forms import CustomerForm, ArtistForm, ReviewForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from datetime import datetime
+from django.contrib.auth.models import User
 #from django.contrib.auth.hashers import set_password
 
 
@@ -238,10 +239,10 @@ def register_customer(request):
             customer = customer_form.save()
             # Now we hash the PASSWORD with the set_PASSWORD method.
             # Once hashed, we can update the user object.
-            customer.PASSWORD= PASSWORD
-            user = User.objects.get_or_create(username=customer.USERNAME,password=customer.PASSWORD)
-            user.password = user.set_password(password)
+            user = User.objects.get_or_create(username=customer.USERNAME,password=customer.PASSWORD)[0]
+            user.set_password(customer.PASSWORD)
             user.save()
+            
             if 'PROFILE_PICTURE' in request.FILES:
                 customer.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
@@ -284,7 +285,7 @@ def register_artist(request):
             # Once hashed, we can update the user object.
             artist.PASSWORD = PASSWORD
             user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)
-            user.password = user.set_password(password)
+            user.password = user.set_password(PASSWORD)
             user.save()
 
             if 'PROFILE_PICTURE' in request.FILES:

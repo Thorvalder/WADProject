@@ -21,7 +21,7 @@
                 <h3>{{review.TITLE}}</h3>
                 <h4>{{review.CUSTOMER.USERNAME}}</h4>
                 <div>
-                    <img src="{{ MEDIA_URL }}review_images/{{review.PICTURE}}" alt="Picture of a Cat." /> 
+                    <img src="{{ MEDIA_URL }}{{review.PICTURE}}" alt="Picture of a Cat." /> 
                 </div>
             {% endfor %}
         
