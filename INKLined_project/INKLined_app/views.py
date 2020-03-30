@@ -246,7 +246,7 @@ def register_customer(request):
             if 'PROFILE_PICTURE' in request.FILES:
                 customer.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
-                customer.PROFILE_PICTURE =  'default.jpg'
+                customer.PROFILE_PICTURE =  'profile_images/default.jpg'
                 
             customer.save()
 
@@ -283,15 +283,15 @@ def register_artist(request):
             artist = artist_form.save()
             # Now we hash the PASSWORD with the set_PASSWORD method.
             # Once hashed, we can update the user object.
-            artist.PASSWORD = PASSWORD
-            user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)
-            user.password = user.set_password(PASSWORD)
+            artist = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)[0]
+            user.set_password(artist.PASSWORD)
             user.save()
-
+            
             if 'PROFILE_PICTURE' in request.FILES:
                 artist.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
-                artist.PROFILE_PICTURE =  'default.jpg'
+                artist.PROFILE_PICTURE =  'profile_images/default.jpg'
+                
             artist.save()
 
             registered = True

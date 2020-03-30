@@ -30,7 +30,7 @@ class CustomerForm(forms.ModelForm):
         customer.PASSWORD = self.cleaned_data["password1"]
         if commit:
             customer.save()
-            user = User.objects.get_or_create(username=customer.USERNAME,password=customer.PASSWORD)
+            
         return customer
 
 class CustomerChangeForm(forms.ModelForm):
