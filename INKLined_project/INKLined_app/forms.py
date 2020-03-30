@@ -54,42 +54,44 @@ class ArtistForm(forms.ModelForm):
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
     
     ADDRESS = forms.CharField(max_length=100)
-    RATING = forms.IntegerField(widget=forms.HiddenInput())
     TOTAL_REVIEWS = forms.IntegerField(widget=forms.HiddenInput(),initial = 0)
     
     PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
     FULL_NAME = forms.CharField(max_length=40,help_text = "Please enter your full name")
     CONTACT_DETAILS = forms.CharField(max_length=80, help_text="Please enter contact details.")
-    NATURE_STYLE = 1
-    CARTOON_STYLE = 2
-    ABSTRACT_STYLE = 3
-    GEOMETRIC_STYLE = 4
-    REALISM_STYLE = 5
-    TRIBAL_STYLE = 6
-    SLEAVE_STYLE = 7
-    WRITING_STYLE = 8
-    NON_ENGLISH_WRITING_STYLE = 9
-    OTHER_STYLE = 10
     STYLE_CHOICES = (
-        (NATURE_STYLE,"Nature"),
-        (CARTOON_STYLE,"Cartoon"),
-        (ABSTRACT_STYLE,"Abstract"),
-        (GEOMETRIC_STYLE,"Geometric"),
-        (REALISM_STYLE,"Realism"),
-        (TRIBAL_STYLE,"Tribal"),
-        (SLEAVE_STYLE,"Sleave"),
-        (WRITING_STYLE,"Writing"),
-        (NON_ENGLISH_WRITING_STYLE,"Non-english Writing"),
-        (OTHER_STYLE,"Other"),
+        (None,None),
+        ("Nature","Nature"),
+        ("Cartoon","Cartoon"),
+        ("Abstract","Abstract"),
+        ("Geometric","Geometric"),
+        ("Realism","Realism"),
+        ("Tribal","Tribal"),
+        ("Sleave","Sleave"),
+        ("Writing","Writing"),
+        ("Non-english Writing","Non-english Writing"),
+        ("Other","Other"),
         )
-    STYLE_1 = forms.CharField(max_length = 20)
-    STYLE_2 = forms.CharField(max_length = 20)
-    STYLE_3 = forms.CharField(max_length = 20)
+    STYLE_1 = forms.ChoiceField(choices = (
+        ("Nature","Nature"),
+        (2,"Cartoon"),
+        (3,"Abstract"),
+        (4,"Geometric"),
+        (5,"Realism"),
+        (6,"Tribal"),
+        (7,"Sleave"),
+        (8,"Writing"),
+        (9,"Non-english Writing"),
+        (10,"Other"),
+        ))
+    
+    STYLE_2 = forms.ChoiceField(choices = STYLE_CHOICES,required=False)
+    STYLE_3 = forms.ChoiceField(choices = STYLE_CHOICES,required=False)
 
 
     class Meta:
         model = Artist
-        fields = ('ARTIST_USERNAME','PASSWORD','ADDRESS','PROFILE_PICTURE','FULL_NAME','CONTACT_DETAILS','STYLE_1','STYLE_2','STYLE_3')
+        fields = ('ARTIST_USERNAME','ADDRESS','PROFILE_PICTURE','FULL_NAME','CONTACT_DETAILS','STYLE_1','STYLE_2','STYLE_3')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -101,11 +103,9 @@ class ArtistForm(forms.ModelForm):
     def save(self, commit=True):
         artist = super().save(commit=False)
         artist.PASSWORD = self.cleaned_data["password1"]
+        artist.RATING = None
         if commit:
             artist.save()
-            user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)[0]
-            user.password = user.set_password(password)
-            user.save()
         return artist
 
 class ArtistChangeForm(forms.ModelForm):

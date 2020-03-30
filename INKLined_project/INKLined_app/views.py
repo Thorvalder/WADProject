@@ -50,7 +50,7 @@ def login_user(request):
                 #context_dict['PASSWORD'] = user.get_password()
                 context_dict['PROFILE_PICTURE'] = u.PROFILE_PICTURE
             else:
-                u = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
+                u = Artist.objects.get(ARTIST_USERNAME=USERNAME)
                 context_dict['ARTIST_USERNAME'] = u.ARTIST_USERNAME
                 #context_dict['PASSWORD'] = user.get_password()
                 context_dict['ADDRESS'] = u.ADDRESS
@@ -276,14 +276,16 @@ def register_artist(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         artist_form = ArtistForm(request.POST)
+        choice = artist_form['STYLE_1']
+        
         #profile_form = UserProfileForm(request.POST)
         # If the two forms are valid...
         if artist_form.is_valid():
-            # Save the user's form data to the database.
+            # Save the user's form data to the database.            
             artist = artist_form.save()
             # Now we hash the PASSWORD with the set_PASSWORD method.
             # Once hashed, we can update the user object.
-            artist = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)[0]
+            user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)[0]
             user.set_password(artist.PASSWORD)
             user.save()
             
