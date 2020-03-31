@@ -100,8 +100,7 @@
                     Style 3: {{ STYLE_3 }}
                 </li>
             </ul>
-            {% endif %}
-			<a href="{% url 'INKLined_app:logout' %}">Log out</a><br />
+            
 =======
             
             
@@ -197,5 +196,7 @@
                 </div>         
         </div>
 {% endif %}
-
+<div>
+<a href="{% url 'INKLined_app:logout' %}">Log out</a><br />
+</div>
 {% endblock %}

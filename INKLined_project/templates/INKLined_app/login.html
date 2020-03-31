@@ -7,7 +7,6 @@
 
 
 {% block body_block %}
-<<<<<<< HEAD
 		<form id="login_form" method="post" action="{% url 'INKLined_app:login' %}"> 
 			{% csrf_token %} 
 			<div style="text-align:center">
@@ -25,24 +24,6 @@
 						<div class="newToINK">
 						New to INKLined? <a href="{% url 'INKLined_app:sign_up' %}"><b>Sign Up</b></a>
 						</div>
-=======
-    <form id="login_form" method="post" action="{% url 'INKLined_app:login' %}"> 
-        {% csrf_token %} 
-		<div style="text-align:center">
-			<div class="loginRectangle">
-				<div class="loginButtonArea">
-					Username: <br />
-					<input type="text" name="username" value="" size="30" style="height:20px"/> <br /> 
-					Password: <br />
-					<input type="password" name="password" value="" size="30" style="height:20px"/> <br />
-					<br />
-					<input type="submit" value="Log in" class="loginButton"/> 
-				</div>
-				
-				<div class="bottomRec">
-					<div class="newToINK">
-					New to INKLined? <a href="{% url 'INKLined_app:sign_up' %}"><b>Sign Up</b></a>
->>>>>>> 3d0df5b96e43fb37344d5672b8f034706a9aa925
 					</div>
 				</div>
 			</div>
