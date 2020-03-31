@@ -1,0 +1,19 @@
+.reviewRectangle{
+	position:absolute;
+	margin-bottom: 50px;
+	width:35%;
+	height:75%;
+	background-color:white;
+	display:block;
+	text-align:center;
+	left:32%;
+	top:25%;
+	border:solid;
+	border-width:2px;
+	border-color:black;
+	border-radius:10px;
+}
+
+input{
+	width:60%;
+}

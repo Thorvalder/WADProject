@@ -153,7 +153,7 @@ class ReviewForm(forms.ModelForm):
     PICTURE = forms.ImageField(help_text = "Please enter a tattoo picture")
  
     TITLE = forms.CharField(help_text = "Please enter a picture title",max_length=Review.TITLE_MAX_LENGTH)
-    DESCRIPTION = forms.URLField(help_text = "Please enter a tattoo description",max_length = Review.DESCRIPTION_MAX_LENGTH)
+    DESCRIPTION = forms.CharField(help_text = "Please enter a tattoo description",max_length = Review.DESCRIPTION_MAX_LENGTH)
     RATING = forms.IntegerField(help_text = "Please enter a tattoo rating")
     DATE = forms.DateField(help_text = "Please enter the tattoo date")
 

@@ -6,27 +6,67 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>INKLined_app says...</h1> 
-    <div> 
-        {% if user.is_authenticated %} 
-            howdy {{ user.username }}! 
-        {% else %} 
-            hey there partner! 
-        {% endif %}
-        <br /> 
-    <div>
-        <h2>REVIEWS:</h2>
+     <h1 style="text-align: center;">  REVIEWS of <a href= "{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}">{{ artist.ARTIST_USERNAME }}  </a> </h1>
+		<h4 style="text-align: center;"> <a href= "{% url 'INKLined_app:add_review' artist.ARTIST_USERNAME %}"> Add review </a>  </h4>
+		<div class="reviews">
+		  <div class="row blockquote review-item">
+			{% for review in reviews %}
+				<div class="col-md-3 text-center">
+					{% if review.CUSTOMER.PROFILE_PICTURE  %}
+						<img class="rounded-circle reviewer" class="reviewer" src="{{ MEDIA_URL }}profile_images/{{review.COSTUMER.PROFILE_PICTURE}}">
+					{% else %}
+						<img class="rounded-circle reviewer" src="\static\images\user.png" width="100"/>
+					{% endif %}
+					  
+					<div class="caption">
+						<small>by {{review.CUSTOMER.USERNAME}}</small>
+					</div>
 
-            {% for review in reviews %}
-                <h3>{{review.TITLE}}</h3>
-                <h4>{{review.CUSTOMER.USERNAME}}</h4>
-                <div>
-                    <img src="{{ MEDIA_URL }}{{review.PICTURE}}" alt="Picture of a Cat." /> 
-                </div>
-            {% endfor %}
-        
+				</div>
+				<div class="col-md-9">
+				  <h4>{{review.TITLE}}</h4>
+				  
+				  <div class="ratings-icons">
+											{% if review.RATING == 5%} 
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+											{% elif review.RATING == 4%} 
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star "></span>
+											{% elif review.RATING == 3%} 
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star "></span>
+												<span class="fa fa-star "></span>
+											{% elif review.RATING == 2%} 
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star "></span>
+												<span class="fa fa-star "></span>
+												<span class="fa fa-star "></span>
+											{% elif review.RATING == 1%} 
+												<span class="fa fa-star checked"></span>
+												<span class="fa fa-star "></span>
+												<span class="fa fa-star "></span>
+												<span class="fa fa-star "></span>
+												<span class="fa fa-star "></span>
+											{% endif %}
+										</div>
+										
+										
+										<p><img src="{{ MEDIA_URL }}review_images/{{review.PICTURE}}" class="img-responsive" alt="" width="400" alt="Picture of a Cat." /> </p>	
+										
 
-    </div>
-
+				</div>    
+				{% endfor %}				
+			  </div>  
+			</div>
 
 {% endblock %}
