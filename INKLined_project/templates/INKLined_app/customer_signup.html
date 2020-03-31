@@ -6,16 +6,20 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Customer Signup</h1> 
+	<div style="text-align:center">
+		<h1>Customer Signup</h1> 
+	</div>
     {% if registered %}
         <strong>thank you for registering!</strong>
     {% else %}
-        <strong>register here!</strong><br />
         <form id="customer_form" method="post" action="{% url 'INKLined_app:add_customer' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ customer_form.as_p }}
-            <input type="submit" name="submit" value="Register" />
-        
+			<div style="text-align:center">
+				<div class="customer_signup-box">
+					{{ customer_form.as_p }}
+					<input type="submit" name="submit" value="Register" />
+				</div>
+			</div>
         </form>
 
     {% endif %}

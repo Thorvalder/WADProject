@@ -6,6 +6,7 @@
 			<link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css">
 			<link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css">
 			<link rel="stylesheet" href="{% static 'css/sign-up.css' %}" type="text/css">
+			<link rel="stylesheet" href="{% static 'css/customer_signup.css' %}" type="text/css">
             <title>
                 INKLined_app - 
                 {% block title_block %}
@@ -24,15 +25,27 @@
 				<div class="buttonRec">
 				{% if pageIsLogin %}
 					<a href="{% url 'INKLined_app:artists' %}"><div class="button" style="left:0px; border-radius: 12px 0px 0px 12px;">Artists</div></a>
-					<a href="{% url 'INKLined_app:login' %}"><div class="button" style="left:0px;background-color:#008CFF;color:white;">Login</div></a>
+					{% if user.is_authenticated %}
+						<a href="{% url 'INKLined_app:show_account' %}"><div class="button" style="left:0px;background-color:#008CFF;color:white;">My Account</div></a>
+					{% else %}
+						<a href="{% url 'INKLined_app:login' %}"><div class="button" style="left:0px;background-color:#008CFF;color:white;">Login</div></a>
+					{% endif %}
 					<a href="{% url 'INKLined_app:sign_up' %}"><div class="button" style="left:0px;border-radius:0px 12px 12px 0px;">Sign up</div></a>
 				{% elif pageIsSignUp %}
 					<a href="{% url 'INKLined_app:artists' %}"><div class="button" style="left:0px; border-radius: 12px 0px 0px 12px;">Artists</div></a>
-					<a href="{% url 'INKLined_app:login' %}"><div class="button" style="left:0px">Login</div></a>
+					{% if user.is_authenticated %}
+						<a href="{% url 'INKLined_app:show_account' %}"><div class="button" style="left:0px">My Account</div></a>
+					{% else %}
+						<a href="{% url 'INKLined_app:login' %}"><div class="button" style="left:0px">Login</div></a>
+					{% endif %}
 					<a href="{% url 'INKLined_app:sign_up' %}"><div class="button" style="left:0px;border-radius:0px 12px 12px 0px;background-color:#008CFF;color:white;">Sign up</div></a>
 				{% else%}
 					<a href="{% url 'INKLined_app:artists' %}"><div class="button" style="left:0px; border-radius: 12px 0px 0px 12px;background-color:#008CFF;color:white;">Artists</div></a>
-					<a href="{% url 'INKLined_app:login' %}"><div class="button" style="left:0px">Login</div></a>
+					{% if user.is_authenticated %}
+						<a href="{% url 'INKLined_app:show_account' %}"><div class="button" style="left:0px">My Account</div></a>
+					{% else %}
+						<a href="{% url 'INKLined_app:login' %}"><div class="button" style="left:0px">Login</div></a>
+					{% endif %}
 					<a href="{% url 'INKLined_app:sign_up' %}"><div class="button" style="left:0px;border-radius:0px 12px 12px 0px;">Sign up</div></a>
 				{% endif %}
 				</div>

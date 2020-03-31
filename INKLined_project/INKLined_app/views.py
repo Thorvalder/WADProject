@@ -21,6 +21,10 @@ def index(request):
 
 
 def login_user(request):
+    
+    if request.user.is_authenticated:
+        return redirect('INKLined_app:show_account')
+    
     if request.method == 'POST':
         try:
             usertype = 'customer'
@@ -83,7 +87,10 @@ def user_logout(request):
     return redirect(reverse('INKLined_app:index'))
 
 
-def show_account(request, USERNAME):
+def show_account(request):
+    if request.user.is_authenticated:
+        USERNAME = request.user.username
+        
     context_dict = {}
     try:
         customer = Customer.objects.get(USERNAME = USERNAME)
@@ -95,7 +102,7 @@ def show_account(request, USERNAME):
         except:
             context_dict['account'] = None
             
-
+    context_dict['pageIsLogin']=True
     return render(request, 'INKLined_app/my-account.html', context=context_dict)
 
 
