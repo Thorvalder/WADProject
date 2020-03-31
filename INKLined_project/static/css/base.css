@@ -5,6 +5,8 @@
 
 .main{
 	position:fixed;
+	overflow: hidden;
+	z-index: 999;
 	top:0px;
 	left:0px;
 	width:100%;
@@ -14,6 +16,7 @@
 	border-bottom:solid;
 	border-bottom-color:#000000;
 }
+
 
 .title{
 	top:14px;

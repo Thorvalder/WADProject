@@ -1,0 +1,26 @@
+.reviewRectangle{
+	position:absolute;
+	margin-bottom: 50px;
+	width: 500px;
+	height:550px;
+	background-color:white;
+	display:block;
+	text-align:center;
+	left:34%;
+	top:25%;
+	border:solid;
+	border-width:2px;
+	border-color:black;
+	border-radius:10px;
+}
+
+.reviewButton{
+	width:30%;
+	font-size: 20px;
+	margin-top:30px;
+	margin-bottom:20px;
+	background-color:#008CFF; 
+	color:white;
+	border-radius:10px;
+}
+

@@ -183,7 +183,7 @@ def add_picture(request):
 def show_reviews(request, ARTIST_USERNAME):
     artist = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
     reviews = Review.objects.filter(ARTIST=artist)
-    context_dict = {'reviews':reviews}
+    context_dict = {'reviews':reviews, 'artist':artist}
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
 
@@ -191,7 +191,7 @@ def show_reviews(request, ARTIST_USERNAME):
 
     
 def add_review(request, ARTIST_USERNAME):
-    
+    USERNAME = request.user.username
     if not request.user.is_authenticated:
         return redirect('INKLined_app:login')
     
@@ -223,7 +223,7 @@ def add_review(request, ARTIST_USERNAME):
     else:
         print(form.errors)
 
-    context_dict = {'form': form, 'Customer': customer}
+    context_dict = {'form': form, 'Customer': customer, 'artist': ARTIST_USERNAME}
     return render(request, 'INKLined_app/add_review.html', context=context_dict)
 
 

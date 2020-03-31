@@ -6,25 +6,73 @@
 {% endblock %}
 
 {% block body_block %}
-    <div>
-        <h1>My Details</h1>
+
+        <h2 style="text-align:center"> My Details </h2>
         {% if USERTYPE %}
             <ul>
-                <li>
-                     Username: {{ USERNAME }}
-                 </li>
-
-                <li>
-                    Profile Picture:
-                    <div>
-                        <img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." /> 
+			<div class="container emp-profile">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                            {% if PROFILE_PICTURE  %}
+							 <img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." /> 
+							{% else %}
+								 <img class="card-img-top" src="\static\images\user.png" style="width:200px;"/> 
+							{% endif %}
+                        </div>
                     </div>
-                </li>
-                <li>
-                    <a href="/INKLined_app/my-account/saved-artists/"> Saved Artists</a>
-                </li>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h4>
+                                       {{ FULL_NAME }}
+                                    </h4>
+                                    <h6>
+										Costumer
+                                    </h6>
+                                    <br></br>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                     <b>About</b>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+    
+                    </div>
+					
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Username</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ USERNAME }}</p>
+                                            </div>
+                                        </div>
+										 <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Saved Artists</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><a href="/INKLined_app/my-account/saved-artists/"> Go Saved Artists Page </a> </p>
+                                            </div>
+                                        </div>
+
+                                        </div>
+                            </div>
+                 
+                        </div>
+                    </div>
+                </div>         
+                
             </ul>
         {% else %}
+<<<<<<< HEAD
             <ul>
                 <li>
                      Username: {{ ARTIST_USERNAME }}
@@ -54,7 +102,100 @@
             </ul>
             {% endif %}
 			<a href="{% url 'INKLined_app:logout' %}">Log out</a><br />
+=======
+            
+            
+>>>>>>> 3d0df5b96e43fb37344d5672b8f034706a9aa925
     </div>
-
+	<div class="container emp-profile">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                            {% if PROFILE_PICTURE  %}
+							 <img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." /> 
+							{% else %}
+								 <img class="card-img-top" src="\static\images\user.png" style="width:200px;"/> 
+							{% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h4>
+                                       {{ FULL_NAME }}
+                                    </h4>
+                                    <h6>
+										Tattoo Artist
+                                    </h6>
+                                    <br></br>
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                     <b>About</b>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+    
+                    </div>
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Username</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ ARTIST_USERNAME }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ FULL_NAME }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ CONTACT_DETAILS }} </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Address</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{ ADDRESS }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>STYLES</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {% if STYLE_1 %}
+														 {{ STYLE_1 }}
+													{% endif %}
+													{% if STYLE_2 %}
+														 {{ STYLE_2 }}
+													{% endif %}
+													{% if STYLE_3 %}
+														 {{ STYLE_3 }}
+													{% endif %}</p>
+                                            </div>
+                                        </div>
+                            </div>
+                 
+                        </div>
+                    </div>
+                </div>         
+        </div>
+{% endif %}
 
 {% endblock %}
