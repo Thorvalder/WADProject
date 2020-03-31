@@ -7,25 +7,24 @@
 
 {% block body_block %}
     <h2 style="text-align: center;"> <b> Add a Review of <a href="{% url 'INKLined_app:show_artist' artist %}"> {{ artist }} </a> </b ></h2>
-		<div class="reviewRectangle" style="margin-bottom=30px;">
-			<form id="category_form" method="post" action="/INKLined_app/artists/<ARTIST_USERNAME>/reviews/add-a-review">
+		<div class="reviewRectangle" >
+			<form id="category_form" method="post" action="/INKLined_app/artists/<ARTIST_USERNAME>/reviews/add-a-review" >
 				 {% csrf_token %}
 					
 					 {% for hidden in form.hidden_fields %}
 						{{ hidden }} 
 					 {% endfor %}
-					 <p  style=" font-size: 17px;"> 
+					 
 					 {% for field in form.visible_fields %}
 					 <br> </br>
 						 {{ field.errors }}
 						 {{ field.help_text }}
 						 </br>
 						 {{ field }}
-						 
+
 					 {% endfor %}
 					 </p>
-						<input type="submit"  name="submit" value="Add review" style=" font-size: 24px; margin-top:40px; margin-bottom:10px;" />
-					
+						<input type="submit"  name="submit" value="Add review" class="reviewButton"/>
 				 
 			 </form>
 			 </div>

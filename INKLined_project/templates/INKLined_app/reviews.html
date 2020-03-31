@@ -25,7 +25,6 @@
 				</div>
 				<div class="col-md-9">
 				  <h4>{{review.TITLE}}</h4>
-				  
 				  <div class="ratings-icons">
 											{% if review.RATING == 5%} 
 												<span class="fa fa-star checked"></span>
@@ -59,10 +58,11 @@
 												<span class="fa fa-star "></span>
 											{% endif %}
 										</div>
-										
+										</br>
+										<p style="font-size:90%;">{{review.DESCRIPTION}}</p>
 										
 										<p><img src="{{ MEDIA_URL }}review_images/{{review.PICTURE}}" class="img-responsive" alt="" width="400" alt="Picture of a Cat." /> </p>	
-										
+										<p style="font-size:70%; text-align:right;">Posted on {{review.DATE}}</p>
 
 				</div>    
 				{% endfor %}				
