@@ -74,15 +74,15 @@ class ArtistForm(forms.ModelForm):
         )
     STYLE_1 = forms.ChoiceField(choices = (
         ("Nature","Nature"),
-        (2,"Cartoon"),
-        (3,"Abstract"),
-        (4,"Geometric"),
-        (5,"Realism"),
-        (6,"Tribal"),
-        (7,"Sleave"),
-        (8,"Writing"),
-        (9,"Non-english Writing"),
-        (10,"Other"),
+        ("Cartoon","Cartoon"),
+        ("Abstract","Abstract"),
+        ("Geometric","Geometric"),
+        ("Realism","Realism"),
+        ("Tribal","Tribal"),
+        ("Sleave","Sleave"),
+        ("Writing","Writing"),
+        ("Non-english Writing","Non-english Writing"),
+        ("Other","Other"),
         ))
     
     STYLE_2 = forms.ChoiceField(choices = STYLE_CHOICES,required=False)
@@ -103,7 +103,8 @@ class ArtistForm(forms.ModelForm):
     def save(self, commit=True):
         artist = super().save(commit=False)
         artist.PASSWORD = self.cleaned_data["password1"]
-        artist.RATING = None
+        ###next line had to fix to an intger to avoid error: Rating cannot be null
+        artist.RATING = 1
         if commit:
             artist.save()
         return artist
