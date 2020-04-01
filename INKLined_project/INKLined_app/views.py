@@ -97,7 +97,15 @@ def show_account(request):
     try:
         customer = Customer.objects.get(USERNAME = USERNAME)
         context_dict['account'] = customer
-        context_dict['ARTIST_USERNAME'] = USERNAME
+        context_dict['USERNAME'] = USERNAME
+        context_dict['PROFILE_PICTURE'] = customer.PROFILE_PICTURE
+        context_dict['FULL_NAME'] = customer.FULL_NAME
+        context_dict['USERTYPE'] = True
+    except:
+        try:
+            artist = Artist.objects.get(ARTIST_USERNAME = USERNAME)
+            context_dict['account'] = artist
+            context_dict['ARTIST_USERNAME'] = USERNAME
             context_dict['PROFILE_PICTURE'] = artist.PROFILE_PICTURE
             context_dict['FULL_NAME'] = artist.FULL_NAME
             context_dict['CONTACT_DETAILS'] = artist.CONTACT_DETAILS
@@ -105,10 +113,6 @@ def show_account(request):
             context_dict['STYLE_1'] = artist.STYLE_1
             context_dict['STYLE_2'] = artist.STYLE_2
             context_dict['STYLE_3'] = artist.STYLE_3
-    except:
-        try:
-            artist = Artist.objects.get(ARTIST_USERNAME = USERNAME)
-            context_dict['account'] = artist
         except:
              context_dict['account'] = None
             
@@ -196,6 +200,7 @@ def show_reviews(request, ARTIST_USERNAME):
     artist = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
     reviews = Review.objects.filter(ARTIST=artist)
     context_dict = {'reviews':reviews}
+    context_dict['artist'] = artist
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
 
