@@ -90,17 +90,27 @@ def user_logout(request):
 def show_account(request):
     if request.user.is_authenticated:
         USERNAME = request.user.username
+    else:
+        return redirect('INKLined_app:login')
         
     context_dict = {}
     try:
         customer = Customer.objects.get(USERNAME = USERNAME)
         context_dict['account'] = customer
+        context_dict['ARTIST_USERNAME'] = USERNAME
+            context_dict['PROFILE_PICTURE'] = artist.PROFILE_PICTURE
+            context_dict['FULL_NAME'] = artist.FULL_NAME
+            context_dict['CONTACT_DETAILS'] = artist.CONTACT_DETAILS
+            context_dict['ADDRESS'] = artist.ADDRESS
+            context_dict['STYLE_1'] = artist.STYLE_1
+            context_dict['STYLE_2'] = artist.STYLE_2
+            context_dict['STYLE_3'] = artist.STYLE_3
     except:
         try:
             artist = Artist.objects.get(ARTIST_USERNAME = USERNAME)
             context_dict['account'] = artist
         except:
-            context_dict['account'] = None
+             context_dict['account'] = None
             
     context_dict['pageIsLogin']=True
     return render(request, 'INKLined_app/my-account.html', context=context_dict)
@@ -152,6 +162,8 @@ def show_artist(request, ARTIST_USERNAME):
         # the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
         context_dict['artist'] = artist
+        context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
+        print(context_dict['gmaps_location'])
     except Artist.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything
@@ -183,7 +195,7 @@ def add_picture(request):
 def show_reviews(request, ARTIST_USERNAME):
     artist = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
     reviews = Review.objects.filter(ARTIST=artist)
-    context_dict = {'reviews':reviews, 'artist':artist}
+    context_dict = {'reviews':reviews}
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
 
@@ -191,7 +203,7 @@ def show_reviews(request, ARTIST_USERNAME):
 
     
 def add_review(request, ARTIST_USERNAME):
-    USERNAME = request.user.username
+
     if not request.user.is_authenticated:
         return redirect('INKLined_app:login')
     
@@ -223,7 +235,7 @@ def add_review(request, ARTIST_USERNAME):
     else:
         print(form.errors)
 
-    context_dict = {'form': form, 'Customer': customer, 'artist': ARTIST_USERNAME}
+    context_dict = {'form': form, 'Customer': customer}
     return render(request, 'INKLined_app/add_review.html', context=context_dict)
 
 

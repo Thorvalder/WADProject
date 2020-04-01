@@ -47,7 +47,7 @@ class Artist(models.Model):
     ARTIST_USERNAME = models.CharField(max_length=USERNAME_MAX, unique=True)
     PASSWORD = models.CharField(max_length=PASSWORD_MAX)
     ADDRESS = models.CharField(max_length=100)
-    RATING = models.IntegerField(default = None)
+    RATING = models.IntegerField(null=True,blank=True)
     TOTAL_REVIEWS = models.IntegerField(default = 0)
     PROFILE_PICTURE = models.ImageField(upload_to='profile_images', blank=True)
     FULL_NAME = models.CharField(max_length=40)

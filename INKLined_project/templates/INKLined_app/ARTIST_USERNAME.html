@@ -19,6 +19,8 @@
         <h1>{{artist.ARTIST_USERNAME}}</h1> 
         
     </div>
+    <iframe width="600" height="450" frameborder="0" style="border:0"
+        src={{ gmaps_location }} allowfullscreen></iframe>
     <div>
         <h2><a href="{% url 'INKLined_app:show_reviews' artist.ARTIST_USERNAME  %}"> Reviews</a></h2>
 
