@@ -98,9 +98,8 @@ def show_account(request):
         customer = Customer.objects.get(USERNAME = USERNAME)
         context_dict['account'] = customer
         context_dict['USERNAME'] = USERNAME
-        context_dict['PROFILE_PICTURE'] = customer.PROFILE_PICTURE
-        context_dict['FULL_NAME'] = customer.FULL_NAME
         context_dict['USERTYPE'] = True
+        context_dict['PROFILE_PICTURE'] = customer.PROFILE_PICTURE
     except:
         try:
             artist = Artist.objects.get(ARTIST_USERNAME = USERNAME)
