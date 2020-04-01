@@ -1,0 +1,22 @@
+.artist_block{
+	position:static;
+	width:33.33%;
+	height:40%;
+	#background-color:red;
+	display:block;
+}
+
+.artist_block_inner{
+	margin:auto;
+	position:relative;
+	top:10%;
+	width:80%;
+	height:80%;
+	display:block;
+	border:solid;
+	border-color:#000000;
+	background-color:white;
+}
+
+
+

@@ -196,3 +196,26 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'password',)
 
 
+#Joseph working on this next bit, may not be necessary.
+"""
+class refineSearchForm(forms.ModelForm):
+    TATTOO_STYLE = forms.ChoiceField(choices = (
+        (None,None),
+        ("Nature","Nature"),
+        ("Cartoon","Cartoon"),
+        ("Abstract","Abstract"),
+        ("Geometric","Geometric"),
+        ("Realism","Realism"),
+        ("Tribal","Tribal"),
+        ("Sleave","Sleave"),
+        ("Writing","Writing"),
+        ("Non-english Writing","Non-english Writing"),
+        ("Other","Other"),
+        ))
+"""
+
+
+
+
+
+    

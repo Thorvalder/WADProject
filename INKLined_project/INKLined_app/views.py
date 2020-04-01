@@ -140,8 +140,9 @@ def sign_up(request):
 
 
 def artists(request):
-    
+    artists = Artist.objects.filter()
     context_dict = {}
+    context_dict['ARTISTS']=artists
     return render(request, 'INKLined_app/artists.html', context=context_dict)
     
 
@@ -212,6 +213,7 @@ def add_review(request, ARTIST_USERNAME):
         return redirect('INKLined_app:login')
     
     try:
+        USERNAME = request.user.username
         customer = Customer.objects.get(USERNAME=USERNAME)
     except Customer.DoesNotExist:
         customer = None
