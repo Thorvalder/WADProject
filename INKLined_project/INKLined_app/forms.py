@@ -105,7 +105,7 @@ class ArtistForm(forms.ModelForm):
         artist = super().save(commit=False)
         artist.PASSWORD = self.cleaned_data["password1"]
         ###next line had to fix to an intger to avoid error: Rating cannot be null
-        artist.RATING = 1
+        ###artist.RATING = 1
         if commit:
             artist.save()
         return artist
@@ -165,18 +165,30 @@ class ArtistChangeForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
-    
-    PICTURE = forms.ImageField(help_text = "Please enter a tattoo picture")
+    RATING_CHOICES=(
+        (1,"1"),
+        (2,"2"),
+        (3,"3"),
+        (4,"4"),
+        (5,"5"),)
+        
+    PICTURE = forms.ImageField(help_text = "Please enter a tattoo picture",required=False)
  
     TITLE = forms.CharField(help_text = "Please enter a picture title",max_length=Review.TITLE_MAX_LENGTH)
     DESCRIPTION = forms.CharField(help_text = "Please enter a tattoo description",max_length = Review.DESCRIPTION_MAX_LENGTH)
-    RATING = forms.IntegerField(help_text = "Please enter a tattoo rating")
+    RATING = forms.ChoiceField(choices=RATING_CHOICES,help_text = "Please enter a tattoo rating")
     DATE = forms.DateField(help_text = "Please enter the tattoo date")
 
 
     class Meta:
         model = Review
-        fields = ('ID','PICTURE','TITLE','DESCRIPTION','RATING','DATE')
+        fields = ('PICTURE','TITLE','DESCRIPTION','RATING','DATE')
+
+    def save(self, commit=True):
+        review = super().save(commit=False)
+        if commit:
+            review.save()
+        return review
         
 class PictureForm(forms.ModelForm):
     UPLOADED_IMAGE = forms.ImageField(help_text = "Please enter a tattoo picture")

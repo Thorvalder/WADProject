@@ -89,7 +89,7 @@ Homepage
 							<div class="card mb">
 								{% if artist.PROFILE_PICTURE  %}
 									<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> <img class="card-img-top"
-											src="{{ MEDIA_URL }}profile_images/{{artist.PROFILE_PICTURE}}"> </a>
+											src="{{ MEDIA_URL }}{{artist.PROFILE_PICTURE}}"> </a>
 								{% else %}
 									<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> <img class="card-img-top"
 											src="\static\images\user.png" width="100" /> </a>

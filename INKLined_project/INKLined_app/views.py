@@ -235,37 +235,46 @@ def add_review(request, ARTIST_USERNAME):
     if not request.user.is_authenticated:
         return redirect('INKLined_app:login')
     
-    try:
-        USERNAME = request.user.username
-        customer = Customer.objects.get(USERNAME=USERNAME)
-    except Customer.DoesNotExist:
-        customer = None
-
-    try:
-        artist = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
-    except Artist.DoesNotExist:
-        artist = None
-        
-    # You cannot add a review to a artist or customer that does not exist...
-    if customer is None or artist is None:
-        return redirect('/INKLined_app/')
-    form = ReviewForm()
+    # A boolean value for telling the template
+    # whether the review adding was successful.
+    # Set to False initially. Code changes value to
+    # True when registration succeeds.
+    reviewed = False
+    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
-    if form.is_valid():
-        if customer and artist:
-            review = form.save(commit=False)
-            review.CUSTOMER = customer
-            review.ARTIST = artist
+        print("posting")
+        # Attempt to grab information from the raw form information.
+        # Note that we make use of both UserForm and UserProfileForm.
+        review_form = ReviewForm(request.POST)
+            
+        # If the form is valid...
+        if review_form.is_valid():
+            # Save the review data to the database.
+            print("saved?")
+            review = review_form.save(commit=False)
+            print("saved")
+            review.PICTURE = request.FILES['PICTURE']
+            review.CUSTOMER = Customer.objects.get(USERNAME = request.user.username)
+            review.ARTIST = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
             review.save()
             return redirect(reverse('INKLined_app:show_artist',
                                     kwargs={'ARTIST_USERNAME':
                                             ARTIST_USERNAME}))
-    else:
-        print(form.errors)
+		
 
-    context_dict = {'form': form, 'Customer': customer, 'artist': ARTIST_USERNAME}
-    return render(request, 'INKLined_app/add_review.html', context=context_dict)
+        else:
+            # Invalid form or forms - mistakes or something else?
+            # Print problems to the terminal.
+            print(review_form.errors)
+    else:
+        # Not a HTTP POST, so we render our form using two ModelForm instances.
+        # These forms will be blank, ready for user input.
+        review_form = ReviewForm()
+        artist = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
+        # Render the template depending on the context.
+        return render(request,'INKLined_app/add_review.html',context={'artist':artist,
+                                                                      'review_form':review_form})
+        
 
 
 
@@ -294,7 +303,7 @@ def register_customer(request):
             if 'PROFILE_PICTURE' in request.FILES:
                 customer.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
-                customer.PROFILE_PICTURE =  'profile_images/default.jpg'
+                customer.PROFILE_PICTURE =  'profile_images/user.png'
                 
             customer.save()
 
@@ -340,7 +349,7 @@ def register_artist(request):
             if 'PROFILE_PICTURE' in request.FILES:
                 artist.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
-                artist.PROFILE_PICTURE =  'profile_images/default.jpg'
+                artist.PROFILE_PICTURE =  'profile_images/user.png'
                 
             artist.save()
 

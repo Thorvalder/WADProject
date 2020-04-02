@@ -251,7 +251,7 @@ def populate():
         add_cus(cust['USERNAME'],cust['PASSWORD'],cust.get('PROFILE_PICTURE','none'))
 
     for art in arts:
-        add_pic(Artist.objects.get(ARTIST_USERNAME = art['ARTIST_USERNAME']),'INKLined_logo.jpg')
+        add_pic(Artist.objects.get(ARTIST_USERNAME = art['ARTIST_USERNAME']),'artist_images/INKLined_logo.jpg')
 
     for cust in custs:
         ca = randint(0,len(arts)-1)
@@ -279,7 +279,7 @@ def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_D
     if(PROFILE_PICTURE != 'none'):
         a.PROFILE_PICTURE = PROFILE_PICTURE
     else:
-        a.PROFILE_PICTURE = 'profile_images/default.jpg'
+        a.PROFILE_PICTURE = 'profile_images/user.png'
         
     a.FULL_NAME = FULL_NAME
     a.CONTACT_DETAILS = CONTACT_DETAILS
@@ -298,7 +298,7 @@ def add_cus(USERNAME,PASSWORD,PROFILE_PICTURE):
     if(PROFILE_PICTURE != 'none'):
         c.PROFILE_PICTURE = PROFILE_PICTURE
     else:
-        c.PROFILE_PICTURE = 'profile_images/default.jpg'
+        c.PROFILE_PICTURE = 'profile_images/user.png'
         
     c.save()
     user = User.objects.get_or_create(username=c.USERNAME,password=c.PASSWORD)[0]

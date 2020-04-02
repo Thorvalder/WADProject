@@ -78,7 +78,7 @@ class Review(models.Model):
     CUSTOMER = models.ForeignKey(Customer, on_delete=models.CASCADE)
     ARTIST = models.ForeignKey(Artist, on_delete=models.CASCADE)
     TITLE = models.CharField(max_length=TITLE_MAX_LENGTH)
-    DESCRIPTION = models.URLField(max_length = DESCRIPTION_MAX_LENGTH)
+    DESCRIPTION = models.CharField(max_length = DESCRIPTION_MAX_LENGTH)
     RATING = models.IntegerField(choices = RATING_CHOICES,null=True)
     DATE = models.DateField(null=True)
     
