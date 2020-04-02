@@ -4,14 +4,14 @@
 	height:40%;
 	#background-color:red;
 	display:block;
+	padding-top:50px;
 }
 
 .artist_block_inner{
 	margin:auto;
 	position:relative;
-	top:10%;
 	width:80%;
-	height:80%;
+	height:500px;
 	display:block;
 	border:solid;
 	border-color:#000000;
