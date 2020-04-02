@@ -176,6 +176,13 @@ def show_artist(request, ARTIST_USERNAME):
         context_dict['reviews'] = None
         return render(request, 'INKLined_app/artists.html', context=context_dict)
     # Go render the response and return it to the client. +
+    try:
+        USERNAME = request.user.username
+        customer = Customer.objects.get(USERNAME = USERNAME)
+        context_dict['USERTYPE'] = True
+    except:
+        context_dict['USERTYPE'] = False
+        
     return render(request, 'INKLined_app/ARTIST_USERNAME.html', context=context_dict)
 
 def add_picture(request):
@@ -203,7 +210,11 @@ def show_reviews(request, ARTIST_USERNAME):
     context_dict['artist'] = artist
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
+def save_artist(request, ARTIST_USERNAME):
+    artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
 
+
+    return redirect(reverse('INKLined_app:index'))
 
 
     

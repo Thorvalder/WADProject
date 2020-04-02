@@ -8,12 +8,23 @@
 {% block body_block %}
     <div>
         <h1>Saves</h1>
+		<form id="search_artists">
+			<input type="text" placeholder="Search for an artist here" style="left:20px">
+		</form>
         {% if saves %}
             <ul>
                 {% for save in saves %}
-                    <li>
-                        <a href="{% url 'INKLined_app:show_artist' save.ARTIST.ARTIST_USERNAME %}"> {{ save.ARTIST.ARTIST_USERNAME }}</a>
-                    </li>
+					<div class="artist_block" style="float:left;">
+						<div class="artist_block_inner">
+							{% if save.ARTIST.PROFILE_PICTURE  %}
+								 <img src="{{ MEDIA_URL }}{{save.ARTIST.PROFILE_PICTURE}}" alt="Profile picture." style="width:200px;"/> 
+								{% else %}
+									 <img class="card-img-top" src="\static\images\user.png" style="width:200px;"/> 
+								{% endif %}
+							<a href="{% url 'INKLined_app:show_artist' save.ARTIST.ARTIST_USERNAME %}"> {{ save.ARTIST.ARTIST_USERNAME }}</a>
+							{{ save.ARTIST.FULL_NAME }}
+						</div>
+					</div>
                 {% endfor %}
             </ul>
         {% else %}
