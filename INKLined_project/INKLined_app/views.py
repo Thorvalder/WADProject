@@ -167,7 +167,6 @@ def show_artist(request, ARTIST_USERNAME):
         # We'll use this in the template to verify that the category exists.
         context_dict['artist'] = artist
         context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
-        print(context_dict['gmaps_location'])
     except Artist.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything
@@ -211,10 +210,22 @@ def show_reviews(request, ARTIST_USERNAME):
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
 def save_artist(request, ARTIST_USERNAME):
+    USERNAME = request.user.username
+    customer = Customer.objects.get(USERNAME=USERNAME)
     artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
+    save = Saves.objects.get_or_create(CUSTOMER=customer,ARTIST=artist)
 
+    reviews = Review.objects.filter(ARTIST = artist)
+    context_dict = {}
 
-    return redirect(reverse('INKLined_app:index'))
+    # Adds our results list to the template context under name pages.
+    context_dict['reviews'] = reviews
+    # We also add the category object from
+    # the database to the context dictionary.
+    # We'll use this in the template to verify that the category exists.
+    context_dict['artist'] = artist
+    context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
+    return render(request, 'INKLined_app/ARTIST_USERNAME.html',context=context_dict)
 
 
     
