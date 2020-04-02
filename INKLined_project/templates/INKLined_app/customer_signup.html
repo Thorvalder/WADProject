@@ -14,9 +14,9 @@
     {% else %}
         <form id="customer_form" method="post" action="{% url 'INKLined_app:add_customer' %}" enctype="multipart/form-data">
             {% csrf_token %}
-			<div style="text-align:center">
-				<div class="customer_signup-box">
-					{{ customer_form.as_p }}
+			<div class="customer_signup-box">
+				{{ customer_form.as_p }}
+				<div style="text-align:center">
 					<input type="submit" name="submit" value="Register" />
 				</div>
 			</div>

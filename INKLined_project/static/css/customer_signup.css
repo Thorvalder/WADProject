@@ -1,15 +1,16 @@
 .customer_signup-box{
 	position:absolute;
-	width:40%;
-	height:50%;
+	width:60%;
+	#height:50%;
 	background-color:white;
 	display:block;
-	text-align:center;
-	left:30%;
+	text-align:left;
+	left:20%;
 	top:25%;
 	border:solid;
 	border-width:2px;
 	border-color:black;
 	border-radius:10px;
 	font-size:20px;
+	padding:20px;
 }
