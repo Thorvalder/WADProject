@@ -19,45 +19,9 @@ body{
   box-shadow: 1px 1px 5px #343a40;
 }
 
-.review-item .review-date{
-  color: #cecece;
-}
-.review-item .review-text{
-  font-size: 16px;
-  font-weight: normal;
-  margin-top: 5px;
-  color: #343a40;
-}
 
 .review-item .reviewer{
   width: 100px;
   height: 100px;
   border: 1px solid #cecece;
-}
-
-
-/* don't change these - you might break something.. */
-.raterater-wrapper {
-    overflow:visible;
-}
-
-.software .raterater-wrapper {
-    margin-top: 4px;
-}
-
-.raterater-layer,
-.raterater-layer i {
-    display: block;
-    position: absolute;
-    overflow: visible;
-    top: 0px;
-    left: 0px;
-}
-.raterater-hover-layer {
-    display: none;
-}
-.raterater-hover-layer i,
-.raterater-rating-layer i {
-    width: 0px;
-    overflow: hidden;
 }

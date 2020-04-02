@@ -12,7 +12,12 @@
 		  <div class="row blockquote review-item">
 			{% for review in reviews %}
 				<div class="col-md-3 text-center">
+				{% if review.CUSTOMER.PROFILE_PICTURE  %}
 					<img class="rounded-circle reviewer" class="reviewer" src="{{ MEDIA_URL }}{{review.CUSTOMER.PROFILE_PICTURE}}">
+				{% else %}
+					<img class="rounded-circle reviewer" src="\static\images\user.png" width="100" />
+				{% endif %}
+					
 					  
 					<div class="caption">
 						<small>by {{review.CUSTOMER.USERNAME}}</small>
@@ -57,7 +62,7 @@
 										</br>
 										<p style="font-size:90%;">{{review.DESCRIPTION}}</p>
 										
-										<p><img src="{{ MEDIA_URL }}/{{review.PICTURE}}" class="img-responsive" alt="" width="400" alt="Picture of a Cat." /> </p>	
+										<p><img src="{{ MEDIA_URL }}review_images/{{review.PICTURE}}" class="img-responsive" alt="" width="400" alt="Review picture" /> </p>	
 										<p style="font-size:70%; text-align:right;">Posted on {{review.DATE}}</p>
 
 				</div>    

@@ -2,31 +2,30 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Add a Review
+Add a Review
 {% endblock %}
 
 {% block body_block %}
-    <h2 style="text-align: center;"> <b> Add a Review of <a href="{% url 'INKLined_app:show_artist' artist %}"> {{ artist }} </a> </b ></h2>
-		<div class="reviewRectangle" >
-			<form id="category_form" method="post" action="/INKLined_app/artists/<ARTIST_USERNAME>/reviews/add-a-review" >
-				 {% csrf_token %}
-					
-					 {% for hidden in form.hidden_fields %}
-						{{ hidden }} 
-					 {% endfor %}
-					 
-					 {% for field in form.visible_fields %}
-					 <br> </br>
-						 {{ field.errors }}
-						 {{ field.help_text }}
-						 </br>
-						 {{ field }}
+<h2 style="text-align: center;"> <b> Add a Review of <a href="{% url 'INKLined_app:show_artist' artist %}"> {{ artist }} </a> </b></h2>
+<div class="reviewRectangle">
+	<form id="category_form" method="post" action="/INKLined_app/artists/<ARTIST_USERNAME>/reviews/add-a-review">
+		{% csrf_token %}
 
-					 {% endfor %}
-					 </p>
-						<input type="submit"  name="submit" value="Add review" class="reviewButton"/>
-				 
-			 </form>
-			 </div>
-		
+		{% for hidden in form.hidden_fields %}
+			{{ hidden }}
+		{% endfor %}
+
+		{% for field in form.visible_fields %}
+			<br> </br>
+			{{ field.errors }}
+			{{ field.help_text }}
+			</br>
+			{{ field }}
+		{% endfor %}
+		<div style="margin-top:20px;">
+			<input type="submit" name="submit" value="Add review" class="reviewButton" />
+		</div>
+	</form>
+</div>
+
 {% endblock %}

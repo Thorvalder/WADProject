@@ -2,115 +2,113 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Homepage
+Homepage
 {% endblock %}
 
 {% block body_block %}
 
-	<p style="font-size:140%; text-align:center;"> &nbsp; &nbsp; Welcome to <b>INK</b>Lined! We help you find the perfect artist for your next tattoo.</p>
+<p style="font-size:140%; text-align:center;"> &nbsp; &nbsp; Welcome to <b>INK</b>Lined! We help you find the perfect
+	artist for your next tattoo.</p>
 
-	<div class="container">
-				<div class="row blog">
-					<div class="col-md-15">
-						<div id="blogCarousel" class="carousel slide" data-ride="carousel">
+<div class="container">
+	<div class="row blog">
+		<div class="col-md-15">
+			<div id="blogCarousel" class="carousel slide" data-ride="carousel">
 
-							<ol class="carousel-indicators">
-								<li data-target="#blogCarousel" data-slide-to="0" class="active"></li>
-								<li data-target="#blogCarousel" data-slide-to="1"></li>
-							</ol>
+				<ol class="carousel-indicators">
+					<li data-target="#blogCarousel" data-slide-to="0" class="active"></li>
+					<li data-target="#blogCarousel" data-slide-to="1"></li>
+				</ol>
 
-							<!-- Carousel items -->
-							<div class="carousel-inner">
+				<!-- Carousel items -->
+				<div class="carousel-inner">
 
-								<div class="carousel-item active">
-									<div class="row">
-										<div class="col-md-4">
-											<div class="shadow p-1 mb-5 bg-white rounded">
-												<img src="\static\images\1.jpg" alt="Image" style="max-width:100%;">
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="shadow p-1 mb-5 bg-white rounded">
-												<img src="\static\images\22.jpg" alt="Image" style="max-width:100%;">
-										</div>
-										</div>
-										<div class="col-md-4">
-											<div class="shadow p-1 mb-5 bg-white rounded">
-												<img src="\static\images\3.jpg" alt="Image" style="max-width:100%;">
-											</div>
-										</div>
-
-
-									</div>
-									<!--.row-->
+					<div class="carousel-item active">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="shadow p-1 mb-5 bg-white rounded">
+									<img src="\static\images\1.jpg" alt="Image" style="max-width:100%;">
 								</div>
-								<!--.item-->
-
-								<div class="carousel-item">
-									<div class="row">
-										<div class="col-md-4">
-											<div class="shadow p-1 mb-5 bg-white rounded">
-												<img src="\static\images\5.jpg" alt="Image" style="max-width:100%;">
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="shadow p-1 mb-5 bg-white rounded">
-												<img src="\static\images\7.jpg" alt="Image" style="max-width:100%;">
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="shadow p-1 mb-5 bg-white rounded">
-												<img src="\static\images\44.jpg" alt="Image" style="max-width:100%;">
-											</div>
-										</div>
-									</div>
-									<!--.row-->
-								</div>
-								<!--.item-->
-
 							</div>
-							<!--.carousel-inner-->
+							<div class="col-md-4">
+								<div class="shadow p-1 mb-5 bg-white rounded">
+									<img src="\static\images\22.jpg" alt="Image" style="max-width:100%;">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="shadow p-1 mb-5 bg-white rounded">
+									<img src="\static\images\3.jpg" alt="Image" style="max-width:100%;">
+								</div>
+							</div>
+
+
 						</div>
-						<!--.Carousel-->
-
+						<!--.row-->
 					</div>
-				</div>
-	</div>
+					<!--.item-->
 
-
-    <div>
-        <h3 style="text-align: center;"> <br></br>Popular Artists</h2>
-        {% if top_artists %}
-			
-			<div class="container">
-			<div class="row justify-content-center">
-				{% for artist in top_artists %}
-				<div class="col-md-2" align="middle" >
-				
-					<div class="card mb" >
-						{% if artist.PROFILE_PICTURE  %}
-							 <a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> <img class="card-img-top" src="{{ MEDIA_URL }}profile_images/{{artist.PROFILE_PICTURE}}"> </a> 
-						{% else %}
-							 <a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> <img class="card-img-top" src="\static\images\user.png" width="100"/> </a>
-						{% endif %}
-					  <div class="card-body mb">
-						<h5 class="card-title"> <a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> {{ artist.ARTIST_USERNAME }}</a>  </h5>
-						<p class="card-text" style="font-size:11px;">{{ artist.CONTACT_DETAILS }}</p>
-						<p style="font-size:15px;">{{ artist.ADDRESS }}</p> </font>
-
-					  </div>
+					<div class="carousel-item">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="shadow p-1 mb-5 bg-white rounded">
+									<img src="\static\images\5.jpg" alt="Image" style="max-width:100%;">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="shadow p-1 mb-5 bg-white rounded">
+									<img src="\static\images\7.jpg" alt="Image" style="max-width:100%;">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="shadow p-1 mb-5 bg-white rounded">
+									<img src="\static\images\44.jpg" alt="Image" style="max-width:100%;">
+								</div>
+							</div>
+						</div>
+						<!--.row-->
 					</div>
+					<!--.item-->
+
 				</div>
-				{% endfor %}
+				<!--.carousel-inner-->
 			</div>
+			<!--.Carousel-->
+
 		</div>
+	</div>
+</div>
+
+
+<div>
+	<h3 style="text-align: center;"> <br></br>Popular Artists</h2>
+		{% if top_artists %}
+			<div class="container" style="margin-bottom:40px">
+				<div class="row justify-content-center">
+					{% for artist in top_artists %}
+						<div class="col-md-2" align="middle">
+							<div class="card mb">
+								{% if artist.PROFILE_PICTURE  %}
+									<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> <img class="card-img-top"
+											src="{{ MEDIA_URL }}profile_images/{{artist.PROFILE_PICTURE}}"> </a>
+								{% else %}
+									<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> <img class="card-img-top"
+											src="\static\images\user.png" width="100" /> </a>
+								{% endif %}
+								<div class="card-body mb">
+									<h5 class="card-title"> 
+									<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}">
+											{{ artist.ARTIST_USERNAME }}</a> </h5>
+									<p class="card-text" style="font-size:11px;">{{ artist.CONTACT_DETAILS }}</p>
+									<p style="font-size:15px;">{{ artist.ADDRESS }}</p>
+									</font>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
 			</div>
-        {% else %}
-            <strong>There are no artists present.</strong>
-        {% endif %}
-		<br></br>
-		<script>// optional
-		$('#blogCarousel').carousel({
-				interval: 5000
-		});</script>
-		{% endblock %}
+</div>
+{% else %}
+	<strong>There are no artists present.</strong>
+{% endif %}
+{% endblock %}

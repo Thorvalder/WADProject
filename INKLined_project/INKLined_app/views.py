@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from INKLined_app.models import Customer,Artist,Review,Saves,Picture
-from INKLined_app.forms import CustomerForm, ArtistForm, ReviewForm
+from INKLined_app.forms import CustomerForm, ArtistForm, ReviewForm, PictureForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from datetime import datetime
@@ -166,6 +166,8 @@ def show_artist(request, ARTIST_USERNAME):
         # the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
         context_dict['artist'] = artist
+        pictures=Picture.objects.filter(ARTIST=artist)
+        context_dict['pictures'] = pictures
         context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
     except Artist.DoesNotExist:
         # We get here if we didn't find the specified category.
@@ -225,8 +227,7 @@ def save_artist(request, ARTIST_USERNAME):
     # We'll use this in the template to verify that the category exists.
     context_dict['artist'] = artist
     context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
-    return render(request, 'INKLined_app/ARTIST_USERNAME.html',context=context_dict)
-
+    return redirect(reverse('INKLined_app:show_artist' , args=[artist]))
 
     
 def add_review(request, ARTIST_USERNAME):
@@ -263,7 +264,7 @@ def add_review(request, ARTIST_USERNAME):
     else:
         print(form.errors)
 
-    context_dict = {'form': form, 'Customer': customer}
+    context_dict = {'form': form, 'Customer': customer, 'artist': ARTIST_USERNAME}
     return render(request, 'INKLined_app/add_review.html', context=context_dict)
 
 

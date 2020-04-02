@@ -2,36 +2,37 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Homepage
+Homepage
 {% endblock %}
 
 {% block body_block %}
-	<h2 style="text-align:center"> My Details </h2>
-	{% if USERTYPE %}
-		<ul>
+
+<h2 style="text-align:center"> My Details </h2>
+{% if USERTYPE %}
+	<ul>
 		<div class="container emp-profile">
 			<div class="row">
 				<div class="col-md-4">
 					<div class="profile-img">
 						{% if PROFILE_PICTURE  %}
-						 <img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." /> 
+							<img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." />
 						{% else %}
-							 <img class="card-img-top" src="\static\images\user.png" style="width:200px;"/> 
+							<img class="card-img-top" src="\static\images\user.png" style="width:200px;" />
 						{% endif %}
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="profile-head">
-								<h4>
-								   {{ FULL_NAME }}
-								</h4>
-								<h6>
-									Customer
-								</h6>
-								<br></br>
-						<ul class="nav nav-tabs" id="myTab" role="tablist">
+						<h4>
+							{{ USERNAME }}
+						</h4>
+						<h6>
+							Customer
+						</h6>
+						<br></br>
+						<ul class="nav nav-tabs" >
 							<li class="nav-item">
-								 <b>About</b>
+								<b>About</b>
 							</li>
 						</ul>
 					</div>
@@ -41,127 +42,142 @@
 				<div class="col-md-4">
 
 				</div>
-				
+
 				<div class="col-md-8">
-					<div class="tab-content profile-tab" id="myTabContent">
-						<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-									<div class="row">
-										<div class="col-md-6">
-											<label>Username</label>
-										</div>
-										<div class="col-md-6">
-											<p>{{ USERNAME }}</p>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-md-6">
-											<label>Saved Artists</label>
-										</div>
-										<div class="col-md-6">
-											<p><a href="/INKLined_app/my-account/saved-artists/"> Go Saved Artists Page </a> </p>
-										</div>
-									</div>
+					<div class="tab-content profile-tab" >
+						<div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>Username</label>
+								</div>
+								<div class="col-md-6">
+									<p>{{ USERNAME }}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>Saved Artists</label>
+								</div>
+								<div class="col-md-6">
+									<p> Click <a href="/INKLined_app/my-account/saved-artists/">here</a> to see your saved
+										artists. </p>
+								</div>
+							</div>
+
 						</div>
 					</div>
-			 
+
 				</div>
 			</div>
-		</div>         
-			
-		</ul>
-	{% else %}
+		</div>
+
+	</ul>
+{% else %}
 
 	<div class="container emp-profile">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="profile-img">
-                            {% if PROFILE_PICTURE  %}
-							 <img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." /> 
-							{% else %}
-								 <img class="card-img-top" src="\static\images\user.png" style="width:200px;"/> 
-							{% endif %}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="profile-head">
-                                    <h4>
-                                       {{ FULL_NAME }}
-                                    </h4>
-                                    <h6>
-										Tattoo Artist
-                                    </h6>
-                                    <br></br>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                     <b>About</b>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-    
-                    </div>
-                    <div class="col-md-8">
-                        <div class="tab-content profile-tab" id="myTabContent">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Username</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{ ARTIST_USERNAME }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Name</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{ FULL_NAME }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Email</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p> {{ CONTACT_DETAILS }} </p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Address</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{ ADDRESS }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>STYLES</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p> {% if STYLE_1 %}
-														 {{ STYLE_1 }}
-													{% endif %}
-													{% if STYLE_2 %}
-														 {{ STYLE_2 }}
-													{% endif %}
-													{% if STYLE_3 %}
-														 {{ STYLE_3 }}
-													{% endif %}</p>
-                                            </div>
-                                        </div>
-                            </div>
-                 
-                        </div>
-                    </div>
-                </div>         
-        </div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="profile-img">
+					{% if PROFILE_PICTURE  %}
+					<img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture." />
+					{% else %}
+					<img class="card-img-top" src="\static\images\user.png" style="width:200px;" />
+					{% endif %}
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="profile-head">
+					<h4>
+						{{ FULL_NAME }}
+					</h4>
+					<h6>
+						Tattoo Artist
+					</h6>
+					<br></br>
+					<ul class="nav nav-tabs" >
+						<li class="nav-item">
+							<b>About</b>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+
+			</div>
+			<div class="col-md-8">
+				<div class="tab-content profile-tab" >
+					<div class="tab-pane fade show active" >
+						<div class="row">
+							<div class="col-md-6">
+								<label>Username</label>
+							</div>
+							<div class="col-md-6">
+								<p>{{ ARTIST_USERNAME }}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<label>Name</label>
+							</div>
+							<div class="col-md-6">
+								<p>{{ FULL_NAME }}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<label>Email</label>
+							</div>
+							<div class="col-md-6">
+								<p> {{ CONTACT_DETAILS }} </p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<label>Address</label>
+							</div>
+							<div class="col-md-6">
+								<p>{{ ADDRESS }}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<label>Styles</label>
+							</div>
+							<div class="col-md-6">
+								<p> {% if STYLE_1 %}
+									{{ STYLE_1 }}
+									{% endif %}
+									{% if STYLE_2 %}
+									{{ STYLE_2 }}
+									{% endif %}
+									{% if STYLE_3 %}
+									{{ STYLE_3 }}
+									{% endif %}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<label>Pictures</label>
+							</div>
+							<div class="col-md-6">
+								<p> Press <a href="/INKLined_app/my-account/add-picture/"> here </a>to add a picture.</p>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
 {% endif %}
-<div>
-<a href="{% url 'INKLined_app:logout' %}">Log out</a><br />
-</div>
+<a href="{% url 'INKLined_app:logout' %}" style="font-size:25px; color:white; ">
+    <div class="reviewButton"
+        style="margin:auto; margin-bottom:50px; background-color:#008CFF; color:white; border-radius:5px; width:180px; height:40px; border:solid black 1px; text-align:center;">
+        Log out
+    </div>
+</a>
+
 {% endblock %}

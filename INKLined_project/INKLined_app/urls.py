@@ -16,5 +16,6 @@ urlpatterns = [
     path('artists/<ARTIST_USERNAME>/reviews/add-a-review', views.add_review, name='add_review'),
     path('logout/', views.user_logout, name='logout'),
     path('artists/<ARTIST_USERNAME>/save-artist/', views.save_artist, name='save_artist'),
+    path('my-account/add-picture/', views.add_picture, name='add-picture'),
 
 ]

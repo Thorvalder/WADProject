@@ -2,35 +2,104 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Homepage
+Homepage
 {% endblock %}
 
 {% block body_block %}
-    <h1>INKLined_app says...</h1> 
-    <div> 
-        {% if user.is_authenticated %} 
-            howdy {{ user.username }}! 
-        {% else %} 
-            hey there partner! 
-        {% endif %}
-        <br /> 
-    </div> 
-    <div>
-        <h1>{{artist.ARTIST_USERNAME}}</h1> 
-        
-    </div>
-    <iframe width="600" height="450" frameborder="0" style="border:0"
-        src={{ gmaps_location }} allowfullscreen></iframe>
-    <div>
-        <h2><a href="{% url 'INKLined_app:show_reviews' artist.ARTIST_USERNAME  %}"> Reviews</a></h2>
 
-    </div>
-	<div>
-		{% if USERTYPE %}
-			<a href="{% url 'INKLined_app:save_artist' artist.ARTIST_USERNAME  %}">Save Button</a>
-		{% endif %}
+
+<div class="container-fluid"
+	style=" background-color:#cae6ff; width:100%; margin-top:-39px;margin-bottom:50px; padding-bottom:30px; padding-left:100px;  box-shadow: 0 5px 6px -6px black;">
+	<div class="row">
+		<div class="profile-img" style="margin-top: 40px; margin-left:70px; margin-right:-50px">
+			{% if PROFILE_PICTURE  %}
+				<img src="{{ MEDIA_URL }}{{PROFILE_PICTURE}}" alt="Profile picture."
+					style=" width:140px; height:140px; border-radius: 50%; box-shadow:0 0 2px rgba(0,0,0,0.8);" />
+			{% else %}
+				<img class="card-img-top" src="\static\images\user.png"
+					style="width:140px; height:140px;   border-radius: 50% ; box-shadow:0 0 2px rgba(0,0,0,0.8);" />
+			{% endif %}
+			<p>	{% if USERTYPE %}
+					<a href="{% url 'INKLined_app:save_artist' artist.ARTIST_USERNAME  %}"> <button type="button" class="btn btn-secondary" style="margin-bottom:-30px; width:130px; height:35px; font-size:15px; font-weight:bold;">Save this artist</button></a>
+				{% endif %} </p>
+		</div>
+		<div class="col-sm-4" style="font-size:15px; margin-top: 46px; margin-left:60px; margin-right:50px;">
+			<h3><strong>{{artist.ARTIST_USERNAME}}</strong> </h3> 
+			<p><strong>NAME: </strong> {{artist.FULL_NAME}} </p>
+			<p><strong>CONTACT DETIALS: </strong> {{artist.CONTACT_DETAILS}} </p>
+			<p><strong>ADDRESS: </strong> {{artist.ADDRESS}} </p>
+			<p><strong>STYLES: </strong>
+				{% if artist.STYLE_1 %}
+					<span class="tags"> {{ artist.STYLE_1 }} </span>
+				{% endif %}
+				{% if artist.STYLE_2 %}
+					<span class="tags">{{ artist.STYLE_2 }}</span>
+				{% endif %}
+				{% if artist.STYLE_3 %}
+					<span class="tags">{{ artist.STYLE_3 }}</span>
+				{% endif %}</p>
+		</div>
+		<div class="row" style="margin-right:40px; margin-top: 50px">
+			<figcaption class="ratings">
+				<h3 style="font-size:18px; background-color:white; border-radius:5px; padding:5px; box-shadow:0 0 2px rgba(0,0,0,0.8);">
+					Rating
+					{% if artist.RATING >= 4.5%}
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+					{% elif artist.RATING >= 3.5  %}
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star "></span>
+					{% elif artist.RATING >= 2.5%}
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star "></span>
+						<span class="fa fa-star "></span>
+					{% elif artist.RATING >= 1.5%}
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star "></span>
+						<span class="fa fa-star "></span>
+						<span class="fa fa-star "></span>
+					{% elif artist.RATING >= 0.5%}
+						<span class="fa fa-star checked"></span>
+						<span class="fa fa-star "></span>
+						<span class="fa fa-star "></span>
+						<span class="fa fa-star "></span>
+						<span class="fa fa-star "></span>
+					{% endif %}
+				</h3>
+				<h5 style="text-align:right; margin-right:10px; margin-top:-5px"><a href="{% url 'INKLined_app:show_reviews' artist.ARTIST_USERNAME  %}"> <u> Reviews </u></a></h5>
+
+			</figcaption>
+			
+		</div>
+		<div class="row">
+			<iframe width="330" height="230" frameborder="0"
+				style=" box-shadow:0 0 2px rgba(0,0,0,0.8); margin-top:20px; margin-left:15px; margin-bottom:-20px"
+				src={{ gmaps_location }} allowfullscreen></iframe>
+		</div>
 	</div>
-
-
+</div>
+<h1 class="gallery-title" style="text-align:center; margin-bottom:30px">Gallery</h1>
+<div class="containerfluid" style="margin-left:150px; margin-right:40px; margin-bottom:70px">
+	<div class="row">
+		<br />
+		{% for picture in pictures %}
+			<div class="gallery_product filter hdpe" style="margin-left:40px; margin-bottom:30px; margin-top:30px">
+				<img src="{{ MEDIA_URL }}{{ picture.UPLOADED_IMAGE }}" alt="Picture." class="img-responsive"
+					style="object-fit: cover;  width: 365px; height: 365px; box-shadow:0 0 9px rgba(0,0,0,0.8) ">
+			</div>
+		{% endfor %}
+	</div>
+</div>
  
+	
+
 {% endblock %}
