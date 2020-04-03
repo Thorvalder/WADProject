@@ -56,7 +56,7 @@
 	width:90%;
 	left:5%;
 	bottom:20px;
-	height:300px;
+	height:200px;
 	display:block;
 	border:solid;
 	border-color:#000000;
@@ -74,7 +74,31 @@
 	border-radius:10px;
 }
 
+.artist_styles{
+	position:absolute;
+	height:80px;
+	width:90%;
+	left:5%;
+	display:block;
+	background-color:#e3f2ff;
+	border:solid;
+	border-color:#000000;
+	bottom:240px;
+	border-radius:10px;
+	border-width:1px;
+	color:black;
+	text-align:center;
+	font-size:20px;
+	
+}
 
+.artist_style_box{
+	position:absolute;
+	width:25%;
+	height:60%;
+	top:30%;
+	
+}
 
 
 
