@@ -190,6 +190,15 @@ def show_artist(request, ARTIST_USERNAME):
         context_dict['pictures'] = pictures
         context_dict['PROFILE_PICTURE'] = artist.PROFILE_PICTURE
         context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
+
+        try:
+            usernameC = request.user.username
+            customer = Customer.objects.get(USERNAME = usernameC)
+            save = Saves.objects.get(CUSTOMER=customer,ARTIST=artist)
+            context_dict['AlreadySaved'] = True
+        except:
+            context_dict['AlreadySaved'] = False
+            
     except Artist.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything
@@ -236,7 +245,11 @@ def save_artist(request, ARTIST_USERNAME):
     USERNAME = request.user.username
     customer = Customer.objects.get(USERNAME=USERNAME)
     artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
-    save = Saves.objects.get_or_create(CUSTOMER=customer,ARTIST=artist)
+    try:
+        save = Saves.objects.get(CUSTOMER=customer,ARTIST=artist)
+        save.delete()
+    except:
+        save = Saves.objects.create(CUSTOMER=customer,ARTIST=artist)
 
     reviews = Review.objects.filter(ARTIST = artist)
     context_dict = {}

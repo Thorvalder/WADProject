@@ -20,7 +20,13 @@ Homepage
 					style="width:140px; height:140px;   border-radius: 50% ; box-shadow:0 0 2px rgba(0,0,0,0.8);" />
 			{% endif %}
 			<p>	{% if USERTYPE %}
-					<a href="{% url 'INKLined_app:save_artist' artist.ARTIST_USERNAME  %}"> <button type="button" class="btn btn-secondary" style="margin-bottom:-30px; width:130px; height:35px; font-size:15px; font-weight:bold;">Save this artist</button></a>
+					<a href="{% url 'INKLined_app:save_artist' artist.ARTIST_USERNAME  %}"> <button type="button" class="btn btn-secondary" style="margin-bottom:-30px; width:130px; height:35px; font-size:15px; font-weight:bold;">
+					{% if AlreadySaved %}
+					Unsave Artist
+					{% else %}
+					Save Artist
+					{% endif %}
+					</button></a>
 				{% endif %} </p>
 		</div>
 		<div class="col-sm-4" style="font-size:15px; margin-top: 46px; margin-left:60px; margin-right:50px;">
