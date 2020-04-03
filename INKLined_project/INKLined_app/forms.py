@@ -191,11 +191,17 @@ class ReviewForm(forms.ModelForm):
         return review
         
 class PictureForm(forms.ModelForm):
-    UPLOADED_IMAGE = forms.ImageField(help_text = "Please enter a tattoo picture")
+    UPLOADED_IMAGE = forms.ImageField(help_text = "Please enter a tattoo picture",required=False)
 
     class Meta:
         model=Picture
-        fields = ('ID','ARTIST','UPLOADED_IMAGE')
+        fields = ('UPLOADED_IMAGE',)
+
+    def save(self, commit=True):
+        picture = super().save(commit=False)
+        if commit:
+            picture.save()
+        return picture
 
 
 

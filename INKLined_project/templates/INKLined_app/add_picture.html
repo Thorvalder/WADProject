@@ -2,28 +2,22 @@
 {% load staticfiles %}
 
 {% block title_block %}
-Add a Picture
+	Add a Picture
 {% endblock %}
 
 {% block body_block %}
-<h1 style="text-align:center">Add a Picture</h1>
-<div class="reviewRectangle" style="height:42%; font-size:18px;">
-	<form id="category_form" method="post" action="/INKLined_app/my-account/add-picture">
-		{% csrf_token %}
+    <h2 style="text-align: center;"> <b> Add a Picture For <a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> {{ artist.ARTIST_USERNAME }}'s Portfolio </a> </b ></h2>
 
-		<p style="margin-top:50px; margin-bottom:-80px">Please choose your username </p>
-		{% for hidden in form.hidden_fields %}
-			{{ hidden }}
-		{% endfor %}
-
-		{% for field in form.visible_fields %}
-			<br> </br>
-			{{ field.errors }}
-			{{ field.help_text }}
-			</br>
-			{{ field }}
-		{% endfor %}
-		</p>
-		<input type="submit" name="submit" value="Add pic " class="reviewButton" />
-</div>
+			<form id="picture_form" method="post" action="{% url 'INKLined_app:add-picture'%}" enctype="multipart/form-data">
+				 {% csrf_token %}
+				 <div class="customer_signup-box">
+					{{ picture_form.as_p }}
+					<div style="text-align:center">
+						<input type="submit"  name="submit" value="Upload Picture" class="reviewButton"/>
+					</div>
+				</div> 
+			 </form>
+			 
+			 
+		
 {% endblock %}

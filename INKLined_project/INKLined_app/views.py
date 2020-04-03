@@ -236,21 +236,48 @@ def show_artist(request, ARTIST_USERNAME):
     return render(request, 'INKLined_app/ARTIST_USERNAME.html', context=context_dict)
 
 def add_picture(request):
-    
+
     if not request.user.is_authenticated:
         return redirect('INKLined_app:login')
     
-    form = PictureForm()
-
+    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        form = PictureForm(request.POST)
+        
+        # Attempt to grab information from the raw form information.
+        # Note that we make use of both UserForm and UserProfileForm.
+        picture_form = PictureForm(request.POST)
+            
+        # If the form is valid...
+        if picture_form.is_valid():
+            
+            if 'UPLOADED_IMAGE' not in request.FILES:
+                print("Must have picture")
+                picture_form = PictureForm()
+                artist = Artist.objects.get(ARTIST_USERNAME= request.user.username)
+                return render(request,'INKLined_app/add_picture.html',context={'artist':artist,
+                                                                      'picture_form':picture_form})
+            # Save the review data to the database.
+            picture = picture_form.save(commit=False)
+            picture.UPLOADED_IMAGE = request.FILES['UPLOADED_IMAGE']
+            picture.ARTIST = Artist.objects.get(ARTIST_USERNAME= request.user.username)
+            picture.save()
+            return redirect(reverse('INKLined_app:show_artist',
+                                    kwargs={'ARTIST_USERNAME':
+                                            request.user.username}))
+		
 
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect('/INKLined_app/')
         else:
-            print(form.errors)
-    return render(request, 'INKLined_app/add_picture.html', {'form': form})
+            # Invalid form or forms - mistakes or something else?
+            # Print problems to the terminal.
+            print(review_form.errors)
+    else:
+        # Not a HTTP POST, so we render our form using two ModelForm instances.
+        # These forms will be blank, ready for user input.
+        picture_form = PictureForm()
+        artist = Artist.objects.get(ARTIST_USERNAME= request.user.username)
+        # Render the template depending on the context.
+        return render(request,'INKLined_app/add_picture.html',context={'artist':artist,
+                                                                      'picture_form':picture_form})
 
 
 def show_reviews(request, ARTIST_USERNAME):
@@ -258,6 +285,14 @@ def show_reviews(request, ARTIST_USERNAME):
     reviews = Review.objects.filter(ARTIST=artist)
     context_dict = {'reviews':reviews}
     context_dict['artist'] = artist
+    user = request.user.username
+    context_dict['not_artist'] = True
+    try:
+        a = Artist.objects.get(ARTIST_USERNAME=user)
+        context_dict['not_artist'] = False
+    except:
+        pass
+        
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
 def save_artist(request, ARTIST_USERNAME):
@@ -302,10 +337,16 @@ def add_review(request, ARTIST_USERNAME):
             
         # If the form is valid...
         if review_form.is_valid():
+            #checks to see if the picture has been added, if not then sends back to add review page with fresh form
+            if 'PICTURE' not in request.FILES:
+                print("Must have picture")
+                review_form = ReviewForm()
+                artist = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
+                return render(request,'INKLined_app/add_review.html',context={'artist':artist,
+                                                                      'review_form':review_form})
             # Save the review data to the database.
-            print("saved?")
             review = review_form.save(commit=False)
-            print("saved")
+                
             review.PICTURE = request.FILES['PICTURE']
             review.CUSTOMER = Customer.objects.get(USERNAME = request.user.username)
             review.ARTIST = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)

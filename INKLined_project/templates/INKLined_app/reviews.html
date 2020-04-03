@@ -6,17 +6,17 @@
 {% endblock %}
 
 {% block body_block %}
-     <h1 style="text-align: center;">  REVIEWS of <a href= "{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}">{{ artist.ARTIST_USERNAME }}  </a> </h1>
+	 <h1 style="text-align: center;">  REVIEWS of <a href= "{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}">{{ artist.ARTIST_USERNAME }}  </a> </h1>
+	 <div>
+	{% if not_artist %}
 		<h4 style="text-align: center;"> <a href= "{% url 'INKLined_app:add_review' artist.ARTIST_USERNAME %}"> Add review </a>  </h4>
+	{% endif %}
+	</div>
 		<div class="reviews">
 		  <div class="row blockquote review-item">
 			{% for review in reviews %}
 				<div class="col-md-3 text-center">
-				{% if review.CUSTOMER.PROFILE_PICTURE  %}
 					<img class="rounded-circle reviewer" class="reviewer" src="{{ MEDIA_URL }}{{review.CUSTOMER.PROFILE_PICTURE}}">
-				{% else %}
-					<img class="rounded-circle reviewer" src="\static\images\user.png" width="100" />
-				{% endif %}
 					
 					  
 					<div class="caption">
