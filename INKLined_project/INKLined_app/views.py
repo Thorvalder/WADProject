@@ -68,11 +68,13 @@ def login_user(request):
                 
             #Joseph added next line for css header button:
             context_dict['pageIsLogin']=True
+            #sends the user to their account page
             response = render(request, 'INKLined_app/my-account.html', context=context_dict)
             return response
             
         else:
             print(f"Invalid login details")
+            #informs of incorrect login details
             return HttpResponse("Invalid login details supplied.")
     else:
         #Joseph added next two lines for css header button:
@@ -92,6 +94,7 @@ def user_logout(request):
 def show_account(request):
 
     #if the user is not logged in then it sends them to the login page, otherwise it will determine if they are a customer or artist
+    # then it will send details to the context dictionary accordingly
     if request.user.is_authenticated:
         USERNAME = request.user.username
     else:
@@ -120,15 +123,18 @@ def show_account(request):
              context_dict['account'] = None
             
     context_dict['pageIsLogin']=True
+    #sends the user to their account page
     return render(request, 'INKLined_app/my-account.html', context=context_dict)
 
-
+#view for showing the customer their saved artists
 def show_saved(request):
+    #finds the customers username and gets all of the matching saves
     USERNAME = request.user.username
     context_dict = {}
     customer = Customer.objects.get(USERNAME = USERNAME)
     saves = Saves.objects.filter(CUSTOMER=customer)
 
+    #fills context dictionary with customer details and their saved artists with one of the artist's pictures if they have any uploaded
     PICTURES = []
     ARTISTS_WITHOUT_PICTURES = []
     for save in saves:
@@ -141,27 +147,33 @@ def show_saved(request):
     context_dict['account'] = customer
     context_dict['PICTURES']=PICTURES
     context_dict['ARTISTS_WITHOUT_PICTURES']=ARTISTS_WITHOUT_PICTURES
-    print(saves)
     
+    #sends the user to their saved artists page
     return render(request, 'INKLined_app/saved-artists.html', context=context_dict)
 
+#view for showing the sign up page
 def sign_up(request):
     context_dict = {}
     #Joseph added next line for CSS
     context_dict['pageIsSignUp']=True;
 
+    #sends the user to the sign up page
     return render(request, 'INKLined_app/sign-up.html', context=context_dict)
 
+#view for deleting accounts
 def delete_account(request):
+    #checks if the user is logged in and if not then sends them to the login page
     if request.user.is_authenticated:
         USERNAME = request.user.username
         USER = request.user
     else:
         return redirect(reverse('INKLined_app:login'))
 
+    #logs out the user then deletes them from the user table
     logout(request)
     USER.delete()
-    
+
+    #deletes the user from their respective table
     try:
         customer = Customer.objects.get(USERNAME = USERNAME)
         customer.delete()
@@ -169,10 +181,13 @@ def delete_account(request):
         ARTIST_USERNAME = USERNAME
         artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
         artist.delete()
-
+    #sends the user to the home page
     return redirect(reverse('INKLined_app:index'))
 
+#view for showing the list of artists
 def artists(request):
+
+    #gets all of the artist objects and sends them to the context dictionary with a picture from their gallery if they have one
     artists = Artist.objects.filter()
     PICTURES = []
     ARTISTS_WITHOUT_PICTURES = []
@@ -186,34 +201,30 @@ def artists(request):
     context_dict = {}
     context_dict['PICTURES']=PICTURES
     context_dict['ARTISTS_WITHOUT_PICTURES']=ARTISTS_WITHOUT_PICTURES
+    #sends the user to the list of artists page
     return render(request, 'INKLined_app/artists.html', context=context_dict)
     
-
+#view for showing an artist's page
 def show_artist(request, ARTIST_USERNAME):
-    # Create a context dictionary which we can pass
-    # to the template rendering engine.
-    context_dict = {}
     
+    #Attempts to get the details of the artist
+    
+    context_dict = {}
     try:
-        # Can we find a category name slug with the given name?
-        # If we can't, the .get() method raises a DoesNotExist exception.
-        # The .get() method returns one model instance or raises an exception.
+        
         artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
-        # Retrieve all of the associated pages.
-        # The filter() will return a list of page objects or an empty list.
         reviews = Review.objects.filter(ARTIST = artist)
 
-        # Adds our results list to the template context under name pages.
         context_dict['reviews'] = reviews
-        # We also add the category object from
-        # the database to the context dictionary.
-        # We'll use this in the template to verify that the category exists.
+
         context_dict['artist'] = artist
         pictures=Picture.objects.filter(ARTIST=artist)
         context_dict['pictures'] = pictures
         context_dict['PROFILE_PICTURE'] = artist.PROFILE_PICTURE
+        #specified string to be used to query by the embedded google maps search engine
         context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
 
+        #checks to see if the user has already saved this artist
         try:
             usernameC = request.user.username
             customer = Customer.objects.get(USERNAME = usernameC)
@@ -221,34 +232,34 @@ def show_artist(request, ARTIST_USERNAME):
             context_dict['AlreadySaved'] = True
         except:
             context_dict['AlreadySaved'] = False
-            
+
+    #if artist is not found then the user is redirected to the artists page
     except Artist.DoesNotExist:
-        # We get here if we didn't find the specified category.
-        # Don't do anything
-        # the template will display the "no category" message for us.
+
         context_dict['artist'] = None
         context_dict['reviews'] = None
         return render(request, 'INKLined_app/artists.html', context=context_dict)
-    # Go render the response and return it to the client. +
+    #checks to see if the user is a customer or artist and sends info to context dictionary
     try:
         USERNAME = request.user.username
         customer = Customer.objects.get(USERNAME = USERNAME)
         context_dict['USERTYPE'] = True
     except:
         context_dict['USERTYPE'] = False
-        
+
+    #sends the user to the artist's page
     return render(request, 'INKLined_app/ARTIST_USERNAME.html', context=context_dict)
 
+#view for adding pictures to an artists gallery
 def add_picture(request):
 
+    #if the artist is not logged in send them to the login page
     if not request.user.is_authenticated:
         return redirect('INKLined_app:login')
-    
-    # If it's a HTTP POST, we're interested in processing form data.
+
+    #if the request is coming from the form input then attempt to add the picture to the database
     if request.method == 'POST':
         
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
         picture_form = PictureForm(request.POST)
             
         # If the form is valid...
@@ -260,11 +271,12 @@ def add_picture(request):
                 artist = Artist.objects.get(ARTIST_USERNAME= request.user.username)
                 return render(request,'INKLined_app/add_picture.html',context={'artist':artist,
                                                                       'picture_form':picture_form})
-            # Save the review data to the database.
+            # Save the picture data to the database.
             picture = picture_form.save(commit=False)
             picture.UPLOADED_IMAGE = request.FILES['UPLOADED_IMAGE']
             picture.ARTIST = Artist.objects.get(ARTIST_USERNAME= request.user.username)
             picture.save()
+            #send the artist to their page
             return redirect(reverse('INKLined_app:show_artist',
                                     kwargs={'ARTIST_USERNAME':
                                             request.user.username}))
@@ -275,16 +287,18 @@ def add_picture(request):
             # Print problems to the terminal.
             print(review_form.errors)
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
+        # Not a HTTP POST so renders blank picture form
+        
         picture_form = PictureForm()
         artist = Artist.objects.get(ARTIST_USERNAME= request.user.username)
-        # Render the template depending on the context.
+        #send the user to the add_picture page
         return render(request,'INKLined_app/add_picture.html',context={'artist':artist,
                                                                       'picture_form':picture_form})
 
-
+#view for showing an artist's reviews
 def show_reviews(request, ARTIST_USERNAME):
+
+    #gets the artist and all of their reviews and sends them to the context dictionary along with the type of user making request
     artist = Artist.objects.get(ARTIST_USERNAME=ARTIST_USERNAME)
     reviews = Review.objects.filter(ARTIST=artist)
     context_dict = {'reviews':reviews}
@@ -296,10 +310,12 @@ def show_reviews(request, ARTIST_USERNAME):
         context_dict['not_artist'] = False
     except:
         pass
-        
+    #sends the user to the review page
     return render(request, 'INKLined_app/reviews.html', context=context_dict)
 
+#view for adding and removing artists to the customer's saved artists
 def save_artist(request, ARTIST_USERNAME):
+    #gets the customer details and the artist details and if the save already exists then it deletes it
     USERNAME = request.user.username
     customer = Customer.objects.get(USERNAME=USERNAME)
     artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
@@ -312,18 +328,17 @@ def save_artist(request, ARTIST_USERNAME):
     reviews = Review.objects.filter(ARTIST = artist)
     context_dict = {}
 
-    # Adds our results list to the template context under name pages.
+    #gets artist details and sends them to the context dictionary and sends the user to the artist's page
     context_dict['reviews'] = reviews
-    # We also add the category object from
-    # the database to the context dictionary.
-    # We'll use this in the template to verify that the category exists.
+
     context_dict['artist'] = artist
     context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
     return redirect(reverse('INKLined_app:show_artist' , args=[artist]))
 
-    
+#view for adding new reviews
 def add_review(request, ARTIST_USERNAME):
 
+    #if user is not logged in them send them to login page
     if not request.user.is_authenticated:
         return redirect('INKLined_app:login')
     
@@ -334,9 +349,7 @@ def add_review(request, ARTIST_USERNAME):
     reviewed = False
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        print("posting")
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
+        #takes the data from the review form
         review_form = ReviewForm(request.POST)
             
         # If the form is valid...
@@ -354,14 +367,17 @@ def add_review(request, ARTIST_USERNAME):
             review.CUSTOMER = Customer.objects.get(USERNAME = request.user.username)
             artist = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
             review.ARTIST = artist
+            #updates the artist's information
             if type(artist.RATING) == type(int):
                 artist.RATING = int(((artist.RATING*artist.TOTAL_REVIEWS) + review.RATING)/(artist.TOTAL_REVIEWS+1))
                 artist.TOTAL_REVIEWS += 1
             else:
                 artist.RATING = review.RATING
                 artist.TOTAL_REVIEWS = 1
+            #updates the review and artist
             review.save()
             artist.save()
+            #sends the user back to the artist's page
             return redirect(reverse('INKLined_app:show_artist',
                                     kwargs={'ARTIST_USERNAME':
                                             ARTIST_USERNAME}))
@@ -372,17 +388,16 @@ def add_review(request, ARTIST_USERNAME):
             # Print problems to the terminal.
             print(review_form.errors)
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
+        # Not a HTTP POST, so renders blank review form
         review_form = ReviewForm()
         artist = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
-        # Render the template depending on the context.
+        # sends the user to the review page and renders the template depending on the context.
         return render(request,'INKLined_app/add_review.html',context={'artist':artist,
                                                                       'review_form':review_form})
         
 
 
-
+#view for creating a new customer
 def register_customer(request):
     # A boolean value for telling the template
     # whether the registration was successful.
@@ -392,24 +407,23 @@ def register_customer(request):
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
         customer_form = CustomerForm(request.POST)
-        #profile_form = UserProfileForm(request.POST)
-        # If the two forms are valid...
+        #checks customer form is valid
         if customer_form.is_valid():
-            # Save the user's form data to the database.
+            # Save the customer's form data to the database.
             customer = customer_form.save()
-            # Now we hash the PASSWORD with the set_PASSWORD method.
-            # Once hashed, we can update the user object.
+            #Creates a user object with customer info with a hashed password
             user = User.objects.get_or_create(username=customer.USERNAME,password=customer.PASSWORD)[0]
             user.set_password(customer.PASSWORD)
             user.save()
-            
+
+            #gets the customer's profle image if they send one, otherwise set it to a default
             if 'PROFILE_PICTURE' in request.FILES:
                 customer.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
                 customer.PROFILE_PICTURE =  'profile_images/user.png'
-                
+
+            #updates the customer
             customer.save()
 
             registered = True
@@ -418,15 +432,15 @@ def register_customer(request):
             # Print problems to the terminal.
             print(customer_form.errors)
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
+        # Not a HTTP POST, renders blank form
         customer_form = CustomerForm()
-        # Render the template depending on the context.
+        # Render the template depending on the context and sends user to customer signup page
     return render(request,
                     'INKLined_app/customer_signup.html',
                     context = {'customer_form': customer_form,
                                'registered': registered})
 
+#view for creating a new artist 
 def register_artist(request):
     # A boolean value for telling the template
     # whether the registration was successful.
@@ -435,39 +449,36 @@ def register_artist(request):
     registered = False
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of both UserForm and UserProfileForm.
+        #takes informtation from the artist form
         artist_form = ArtistForm(request.POST)
         choice = artist_form['STYLE_1']
         
-        #profile_form = UserProfileForm(request.POST)
-        # If the two forms are valid...
+        # If the forms are valid...
         if artist_form.is_valid():
-            # Save the user's form data to the database.            
+            # Save the artist's form data to database          
             artist = artist_form.save()
-            # Now we hash the PASSWORD with the set_PASSWORD method.
-            # Once hashed, we can update the user object.
+            # creates new user with artist's info and hashed password
             user = User.objects.get_or_create(username=artist.ARTIST_USERNAME,password=artist.PASSWORD)[0]
             user.set_password(artist.PASSWORD)
             user.save()
-            
+            #attempts to get profile picture and if one wasn't provided then it uses a default
             if 'PROFILE_PICTURE' in request.FILES:
                 artist.PROFILE_PICTURE =  request.FILES['PROFILE_PICTURE']
             else:
                 artist.PROFILE_PICTURE =  'profile_images/user.png'
-                
+            #update teh artist object
             artist.save()
-
+            
+            #updates the registered status
             registered = True
         else:
             # Invalid form or forms - mistakes or something else?
             # Print problems to the terminal.
             print(artist_form.errors)
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
+        # Not a HTTP POST, so we renders blank form
         artist_form = ArtistForm()
-        # Render the template depending on the context.
+        # Render the template depending on the context and sends user to artist signup page
     return render(request,
                     'INKLined_app/artist_signup.html',
                     context = {'artist_form': artist_form,
