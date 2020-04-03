@@ -1,3 +1,4 @@
+#Importing required libraries
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -8,9 +9,9 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.models import User
-#from django.contrib.auth.hashers import set_password
 
 
+#home page view which lists the top five artists and sends the user to the home page
 def index(request):
     top_artist_list = Artist.objects.order_by('-RATING')[:5]
     context_dict = {}
@@ -19,12 +20,14 @@ def index(request):
     response = render(request, 'INKLined_app/home.html', context=context_dict)
     return response
 
-
+#view for logging in the user
 def login_user(request):
-    
+
+    #checks if the user is already logged in and if so then it sends them to their account page
     if request.user.is_authenticated:
         return redirect('INKLined_app:show_account')
-    
+
+    #if the user is submitting the log in form then the view attempts to authenticate their entered details
     if request.method == 'POST':
         try:
             usertype = 'customer'
@@ -37,7 +40,7 @@ def login_user(request):
         except:
             print('bad login')
             
-
+        #if the user has authenticated then it checks to see if the user is a customer or artist and sends details to the context dictionary accordingly
         if user:
             print(user.password)
             login(request, user)
@@ -51,12 +54,10 @@ def login_user(request):
                 u = Customer.objects.get(USERNAME=USERNAME)
                 context_dict['USERTYPE'] = usertype
                 context_dict['USERNAME'] = u.USERNAME
-                #context_dict['PASSWORD'] = user.get_password()
                 context_dict['PROFILE_PICTURE'] = u.PROFILE_PICTURE
             else:
                 u = Artist.objects.get(ARTIST_USERNAME=USERNAME)
                 context_dict['ARTIST_USERNAME'] = u.ARTIST_USERNAME
-                #context_dict['PASSWORD'] = user.get_password()
                 context_dict['ADDRESS'] = u.ADDRESS
                 context_dict['PROFILE_PICTURE'] = u.PROFILE_PICTURE
                 context_dict['FULL_NAME'] = u.FULL_NAME
@@ -80,14 +81,17 @@ def login_user(request):
         return render(request, 'INKLined_app/login.html', context=context_dict)
 
 
-
+#view for logging users out
 @login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse('INKLined_app:index'))
 
 
+#view for showing a user their account details
 def show_account(request):
+
+    #if the user is not logged in then it sends them to the login page, otherwise it will determine if they are a customer or artist
     if request.user.is_authenticated:
         USERNAME = request.user.username
     else:
@@ -350,8 +354,12 @@ def add_review(request, ARTIST_USERNAME):
             review.CUSTOMER = Customer.objects.get(USERNAME = request.user.username)
             artist = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
             review.ARTIST = artist
-            artist.RATING = int(((artist.RATING*artist.TOTAL_REVIEWS) + review.RATING)/(artist.TOTAL_REVIEWS+1))
-            artist.TOTAL_REVIEWS += 1
+            if type(artist.RATING) == type(int):
+                artist.RATING = int(((artist.RATING*artist.TOTAL_REVIEWS) + review.RATING)/(artist.TOTAL_REVIEWS+1))
+                artist.TOTAL_REVIEWS += 1
+            else:
+                artist.RATING = review.RATING
+                artist.TOTAL_REVIEWS = 1
             review.save()
             artist.save()
             return redirect(reverse('INKLined_app:show_artist',
