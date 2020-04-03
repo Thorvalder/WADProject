@@ -124,9 +124,19 @@ def show_saved(request):
     context_dict = {}
     customer = Customer.objects.get(USERNAME = USERNAME)
     saves = Saves.objects.filter(CUSTOMER=customer)
-    
+
+    PICTURES = []
+    ARTISTS_WITHOUT_PICTURES = []
+    for save in saves:
+        try:
+            picture = Picture.objects.filter(ARTIST = save.ARTIST)[0]
+            PICTURES = PICTURES + [picture]
+        except:
+            ARTISTS_WITHOUT_PICTURES = ARTISTS_WITHOUT_PICTURES + [save.ARTIST]
+            
     context_dict['account'] = customer
-    context_dict['saves'] = saves
+    context_dict['PICTURES']=PICTURES
+    context_dict['ARTISTS_WITHOUT_PICTURES']=ARTISTS_WITHOUT_PICTURES
     print(saves)
     
     return render(request, 'INKLined_app/saved-artists.html', context=context_dict)
@@ -141,8 +151,18 @@ def sign_up(request):
 
 def artists(request):
     artists = Artist.objects.filter()
+    PICTURES = []
+    ARTISTS_WITHOUT_PICTURES = []
+    for artist in artists:
+        try:
+            picture = Picture.objects.filter(ARTIST = artist)[0]
+            PICTURES = PICTURES + [picture]
+        except:
+            ARTISTS_WITHOUT_PICTURES = ARTISTS_WITHOUT_PICTURES + [artist]
+            
     context_dict = {}
-    context_dict['ARTISTS']=artists
+    context_dict['PICTURES']=PICTURES
+    context_dict['ARTISTS_WITHOUT_PICTURES']=ARTISTS_WITHOUT_PICTURES
     return render(request, 'INKLined_app/artists.html', context=context_dict)
     
 
@@ -168,6 +188,7 @@ def show_artist(request, ARTIST_USERNAME):
         context_dict['artist'] = artist
         pictures=Picture.objects.filter(ARTIST=artist)
         context_dict['pictures'] = pictures
+        context_dict['PROFILE_PICTURE'] = artist.PROFILE_PICTURE
         context_dict['gmaps_location'] = "https://www.google.com/maps/embed/v1/place?q="+artist.ADDRESS.replace(" ","+")+",+Glasgow,+UK&key=AIzaSyDrnqDTlBB6vGWaMmrb7zCkap09boRPslk"
     except Artist.DoesNotExist:
         # We get here if we didn't find the specified category.

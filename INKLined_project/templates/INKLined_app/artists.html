@@ -6,22 +6,59 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1 style="left:20px">Artists:</h1> 
+    <h1 style="margin-left:20px;">Artists:</h1> 
     <!-- List of artists-->
-	<form id="search_artists">
-		<input type="text" placeholder="Search for an artist here" style="left:20px">
+	<form id="search_artists" style="margin-left:20px;">
+		<input type="text" placeholder="Search for an artist here" style="left:20px;width:33%;height:30px;">
 	</form>
 	<div>
-        {% if ARTISTS %}
+        {% if PICTURES or ARTISTS_WITHOUT_PICTURES %}
             <ul>
-                {% for artist in ARTISTS %}
+                {% for picture in PICTURES %}
 					<div class="artist_block" style="float:left;">
 						<div class="artist_block_inner">
+						
+							{% if picture.ARTIST.PROFILE_PICTURE  %}
+								 <img src="{{ MEDIA_URL }}{{picture.ARTIST.PROFILE_PICTURE}}" alt="Profile picture." class="artist_block_profile_picture" /> 
+							{% else %}
+								<img src="\static\images\user.png" class="artist_block_profile_picture" />
+							{% endif %}
+							
+							<div class="artist_block_details">
+								<br />
+								<a href="{% url 'INKLined_app:show_artist' picture.ARTIST.ARTIST_USERNAME %}"> {{ picture.ARTIST.ARTIST_USERNAME }}</a>
+								<br />
+								{{ picture.ARTIST.FULL_NAME }}
+							</div>
+							
 
-								 <img src="{{ MEDIA_URL }}{{artist.PROFILE_PICTURE}}" alt="Profile picture." style="width:200px;"/> 
+							<img src="{{ MEDIA_URL }}{{ picture.UPLOADED_IMAGE }}" alt="Sample Picture" class="artist_block_picture" /> 
 
-							<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> {{ artist.ARTIST_USERNAME }}</a>
-							{{ artist.FULL_NAME }}
+						</div>
+					</div>
+                {% endfor %}
+				
+				{% for artist in ARTISTS_WITHOUT_PICTURES %}
+					<div class="artist_block" style="float:left;">
+						<div class="artist_block_inner">
+						
+							{% if artist.PROFILE_PICTURE  %}
+								 <img src="{{ MEDIA_URL }}{{artist.PROFILE_PICTURE}}" alt="Profile picture." class="artist_block_profile_picture" /> 
+							{% endif %}
+							
+							<div class="artist_block_details">
+								<br />
+								<a href="{% url 'INKLined_app:show_artist' artist.ARTIST_USERNAME %}"> {{ artist.ARTIST_USERNAME }}</a>
+								<br />
+								{{ artist.FULL_NAME }}
+							</div>
+
+							<!--
+							<img src="{{ MEDIA_URL }}{{ picture.UPLOADED_IMAGE }}" alt="Sample Picture" class="artist_block_picture" /> 
+							-->
+							<div class="artist_block_picture">
+							Default pic to go here please.
+							</div>
 						</div>
 					</div>
                 {% endfor %}
