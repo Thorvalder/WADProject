@@ -3,7 +3,8 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 
-# Create your models here.
+#Creating customer model to hold customer details
+#contains username, password and profile picture
 class Customer(models.Model):
     USERNAME_MAX = 30
     PASSWORD_MAX = 10000
@@ -18,6 +19,8 @@ class Customer(models.Model):
     def __str__(self):
         return self.USERNAME
 
+#Creating artist model to hold artist details
+#contains username, password,address,rating,review number,full name, contact details and up to 3 styles
 class Artist(models.Model):
     NATURE_STYLE = 1
     CARTOON_STYLE = 2
@@ -62,7 +65,8 @@ class Artist(models.Model):
     def __str__(self):
         return self.ARTIST_USERNAME
     
-    
+#creating review model to hold review details
+#contains a title, description, unique identifier, picture, customer, artist, rating, date
 class Review(models.Model):
     RATING_CHOICES = (
         (1,1),
@@ -84,7 +88,8 @@ class Review(models.Model):
     
     def __str__(self):
         return str(self.ID)
-
+#creating a picture model to store artist uploaded picture details
+#contains a unique ID, artist and uploaded image
 class Picture(models.Model):
     ID = models.AutoField(auto_created = True,primary_key=True)
     ARTIST = models.ForeignKey(Artist, on_delete=models.CASCADE)
@@ -95,7 +100,8 @@ class Picture(models.Model):
 
     def __str__(self):
         return str(self.ID)
-
+#creating a saved artist model to store details on a customer's saved artist
+#contains a customer and an artist
 class Saves(models.Model):
     CUSTOMER = models.ForeignKey(Customer, on_delete=models.CASCADE)
     ARTIST = models.ForeignKey(Artist, on_delete=models.CASCADE)

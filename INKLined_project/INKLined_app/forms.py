@@ -6,6 +6,9 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.models import User
 
 
+#creating a customer form to input customer details
+#users enter a username, 2 passwords and a profile picture
+#contains methods for creating and saving a customer as well as validating passwords
 
 class CustomerForm(forms.ModelForm):
     USERNAME = forms.CharField(max_length=Customer.USERNAME_MAX,
@@ -32,7 +35,8 @@ class CustomerForm(forms.ModelForm):
             customer.save()
             
         return customer
-
+#form for changing customer details
+#users enter a password and a picture
 class CustomerChangeForm(forms.ModelForm):
     PASSWORD = ReadOnlyPasswordHashField(help_text = "Please enter a password")
     PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
@@ -45,7 +49,9 @@ class CustomerChangeForm(forms.ModelForm):
         return self.initial["PASSWORD"]
 
     
-
+#form for creating an artist
+#users enter a username, 2 passwords, address,picture,full name, contact details and up to 3 styles
+#contains methods for creating and saving a artist as well as validating passwords
 class ArtistForm(forms.ModelForm):
     ARTIST_USERNAME = forms.CharField(max_length=Artist.USERNAME_MAX,
                             help_text="Please enter a username.")
@@ -104,12 +110,12 @@ class ArtistForm(forms.ModelForm):
     def save(self, commit=True):
         artist = super().save(commit=False)
         artist.PASSWORD = self.cleaned_data["password1"]
-        ###next line had to fix to an intger to avoid error: Rating cannot be null
-        ###artist.RATING = 1
         if commit:
             artist.save()
         return artist
 
+#form for changing artist details
+#users enter a username, 2 passwords, address,picture,full name, contact details and up to 3 styles
 class ArtistChangeForm(forms.ModelForm):
     PASSWORD = ReadOnlyPasswordHashField(help_text = "Please enter a password")
     PROFILE_PICTURE = forms.ImageField(help_text = "Please enter a profile picture",initial='default.jpg')
@@ -163,7 +169,9 @@ class ArtistChangeForm(forms.ModelForm):
     def clean_password(self):
         return self.initial["PASSWORD"]
 
-
+#form for addding reviews
+#users enter a rating, picture,title,description and date
+#contains method for creating and saving a review
 class ReviewForm(forms.ModelForm):
     RATING_CHOICES=(
         (1,"1"),
@@ -189,7 +197,10 @@ class ReviewForm(forms.ModelForm):
         if commit:
             review.save()
         return review
-        
+    
+#form for adding pictures
+#users enter a picture
+#contains method for creating and saving a review       
 class PictureForm(forms.ModelForm):
     UPLOADED_IMAGE = forms.ImageField(help_text = "Please enter a tattoo picture",required=False)
 
@@ -204,7 +215,8 @@ class PictureForm(forms.ModelForm):
         return picture
 
 
-
+#form for user passwords
+#users enter a password
 class UserForm(forms.ModelForm):
     
     password = forms.CharField(widget=forms.PasswordInput())
@@ -213,24 +225,6 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'password',)
 
-
-#Joseph working on this next bit, may not be necessary.
-"""
-class refineSearchForm(forms.ModelForm):
-    TATTOO_STYLE = forms.ChoiceField(choices = (
-        (None,None),
-        ("Nature","Nature"),
-        ("Cartoon","Cartoon"),
-        ("Abstract","Abstract"),
-        ("Geometric","Geometric"),
-        ("Realism","Realism"),
-        ("Tribal","Tribal"),
-        ("Sleave","Sleave"),
-        ("Writing","Writing"),
-        ("Non-english Writing","Non-english Writing"),
-        ("Other","Other"),
-        ))
-"""
 
 
 
