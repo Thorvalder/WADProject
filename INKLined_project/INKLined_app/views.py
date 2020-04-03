@@ -346,11 +346,14 @@ def add_review(request, ARTIST_USERNAME):
                                                                       'review_form':review_form})
             # Save the review data to the database.
             review = review_form.save(commit=False)
-                
             review.PICTURE = request.FILES['PICTURE']
             review.CUSTOMER = Customer.objects.get(USERNAME = request.user.username)
-            review.ARTIST = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
+            artist = Artist.objects.get(ARTIST_USERNAME= ARTIST_USERNAME)
+            review.ARTIST = artist
+            artist.RATING = int(((artist.RATING*artist.TOTAL_REVIEWS) + review.RATING)/(artist.TOTAL_REVIEWS+1))
+            artist.TOTAL_REVIEWS += 1
             review.save()
+            artist.save()
             return redirect(reverse('INKLined_app:show_artist',
                                     kwargs={'ARTIST_USERNAME':
                                             ARTIST_USERNAME}))

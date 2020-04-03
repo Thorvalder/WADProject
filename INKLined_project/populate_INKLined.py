@@ -1,61 +1,16 @@
+#Importing relevant files and setting up django
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'INKLined_project.settings')
 import django 
 django.setup()
 from INKLined_app.models import Customer, Review, Artist,Picture,Saves
-#from django.contrib.auth.hashers import set_password
 from django.contrib.auth.models import User
 from datetime import date
 from random import randint
 
 def populate(): 
-    # First, we will create lists of dictionaries containing the pages
-    # we want to add into each category.
-    # Then we will create a dictionary of dictionaries for our categories.
-    # This might seem a little bit confusing, but it allows us to iterate
-    # through each data structure, and add the data to our models.
-##    python_pages = [
-##        {'title': 'Official Python Tutorial',
-##         'url':'http://docs.python.org/3/tutorial/',
-##        'views':60},
-##        {'title':'How to Think like a Computer Scientist',
-##         'url':'http://www.greenteapress.com/thinkpython/',
-##         'views':40},
-##        {'title':'Learn Python in 10 Minutes',
-##         'url':'http://www.korokithakis.net/tutorials/python/',
-##         'views':28}]
-##
-##    django_pages = [
-##        {'title':'Official Django Tutorial',
-##         'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/',
-##         'views':30},
-##        {'title':'Django Rocks',
-##         'url':'http://www.djangorocks.com/',
-##         'views':20},
-##        {'title':'How to Tango with Django',
-##         'url':'http://www.tangowithdjango.com/',
-##         'views':14}]
-##
-##    other_pages = [
-##        {'title':'Bottle',
-##         'url':'http://bottlepy.org/docs/dev/',
-##         'views':20},
-##        {'title':'Flask',
-##         'url':'http://flask.pocoo.org',
-##         'views':12}]
-
-    
-
-##    cats = {'Python': {'pages': python_pages,
-##                       'views' :128,
-##                       'likes':64},
-##            'Django': {'pages': django_pages,
-##                       'views' :64,
-##                       'likes':32},
-##            'Other Frameworks': {'pages': other_pages,
-##                                 'views' :32,
-##                                 'likes':16}}
+    #Setting up dictionaries with artist, review and custome details
 
     arts=[
         {'ARTIST_USERNAME':'JDOE123',
@@ -232,18 +187,7 @@ def populate():
 
 
     
-    
-
-##    for cat, cat_data in cats.items():
-##        c = add_cat(cat,cat_data['views'],cat_data['likes'])
-##        for p in cat_data['pages']:
-##            add_page(c, p['title'], p['url'],p['views'])
-##            
-##    # Print out the categories we have added.
-##    for c in Category.objects.all():
-##        for p in Page.objects.filter(category=c):
-##            print(f'- {c}: {p}')
-
+    #adding artist, customers, pictures,saves and reviews to the database
     for art in arts:
         add_art(art['ARTIST_USERNAME'],art['PASSWORD'],art['ADDRESS'],art.get('PROFILE_PICTURE','none'),art['FULL_NAME'],art['CONTACT_DETAILS'],art['STYLE_1'])
 
@@ -268,12 +212,11 @@ def populate():
         if(counter == 5):
             counter = 0
         
-
+#method for creating artists
 def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_DETAILS,STYLE):
+    #creates a new artist, giving them a default profile picture if one wasn't assigned
     a = Artist.objects.get_or_create(ARTIST_USERNAME=ARTIST_USERNAME)[0]
     a.PASSWORD = PASSWORD
-    print("////////////////////////////////////////////////////////")
-    print(a.PASSWORD)
     a.ADDRESS = ADDRESS
     
     if(PROFILE_PICTURE != 'none'):
@@ -284,63 +227,80 @@ def add_art(ARTIST_USERNAME,PASSWORD,ADDRESS,PROFILE_PICTURE,FULL_NAME,CONTACT_D
     a.FULL_NAME = FULL_NAME
     a.CONTACT_DETAILS = CONTACT_DETAILS
     a.STYLE_1 = STYLE
+    #adds the artist to the database
     a.save()
+    #creates a new user object with the artist username and password for authentication purposes
     user = User.objects.get_or_create(username=a.ARTIST_USERNAME,password=a.PASSWORD)[0]
-    print(user)
+    #hashing the password of the user so that it is encrypted
     user.set_password(PASSWORD)
+    #adding the user to the database
     user.save()
-    a.save
+    #returns the artist
     return a
 
+#method for adding new customers
 def add_cus(USERNAME,PASSWORD,PROFILE_PICTURE):
+    #creates a new customer object and gives it a default profile picture if one wasn't assigned
     c = Customer.objects.get_or_create(USERNAME=USERNAME)[0]
     c.PASSWORD = PASSWORD
     if(PROFILE_PICTURE != 'none'):
         c.PROFILE_PICTURE = PROFILE_PICTURE
     else:
         c.PROFILE_PICTURE = 'profile_images/user.png'
-        
+
+    #adds the customer to the database
     c.save()
+    #creates a new user object with the customer username and password for authentication purposes
     user = User.objects.get_or_create(username=c.USERNAME,password=c.PASSWORD)[0]
+    #hashing the password of the user so that it is encrypted
     user.set_password(PASSWORD)
+    #adding the user to the database
     user.save()
+    #returns the customer
     return c
 
+#method for adding reviews
 def add_rev(a,c, PICTURE, TITLE,DESCRIPTION,RATING,DATE):
+    #creates a new review with given details
     r = Review(PICTURE = PICTURE,CUSTOMER = c,ARTIST = a,TITLE = TITLE,
                DESCRIPTION = DESCRIPTION,RATING = RATING,DATE = DATE)
-##    r.PICTURE = PICTURE
-##    r.USERNAME = USERNAME
-##    r.CUSTOMER = c
-##    r.ARTIST = a
-##    r.TITLE = TITLE
-##    r.DESCRIPTION = DESCRIPTION
-##    r.RATING = RATING
-##    r.DATE = DATE
+
+    #saves the review
     r.save()
+
+    #calculates the artist's rating and total number of reviews
     temp = a.TOTAL_REVIEWS
     a.TOTAL_REVIEWS += 1
     if(type(a.RATING) != type(int)):
         a.RATING = 0
     a.RATING = ((a.RATING*temp)+RATING)/a.TOTAL_REVIEWS
+
+    #updates the artist's rating and review number
     a.save()
+    #returns the review
     return r
 
+#method for adding pictures
 def add_pic(a,UPLOADED_IMAGE):
+    #creates a new picture using given details
     p = Picture(ARTIST=a,UPLOADED_IMAGE=UPLOADED_IMAGE)
+    #adds the picture to the database
     p.save()
+    #returns the picture
     return p
 
+#method for adding a new customer save
 def add_sav(c,a):
+    #creates the new save using customer details and adds it to the database
     p = Saves(CUSTOMER=c,ARTIST=a)
     p.save()
-
+    #returns the save
     return p
 
 
 
 
-# Start execution here!
+#Executes populate method when script is ran
 if __name__ == '__main__':
     print('Starting INKLined_app population script...')
     populate()
