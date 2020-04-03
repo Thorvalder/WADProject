@@ -16,7 +16,74 @@
 	border:solid;
 	border-color:#000000;
 	background-color:white;
+	border-radius:20px;
 }
+
+.artist_block_profile_picture{
+	position:absolute;
+	height:140px;
+	top:20px;
+	left:5%;
+	width:40%;
+	display:block;
+	border:solid;
+	border-width:1px;
+	border-color:#000000;
+	background-color:white;
+	border-radius:70px;
+	object-fit:cover;
+}
+
+.artist_block_details{
+	position:absolute;
+	height:140px;
+	top:20px;
+	right:5%;
+	width:45%;
+	display:block;
+	border:solid;
+	border-color:#000000;
+	background-color:#e3f2ff;
+	text-align:center;
+	border-radius:10px;
+	border-width:1px;
+	font-size:20px;
+}
+
+.artist_block_picture{
+	margin:auto;
+	position:absolute;
+	width:90%;
+	left:5%;
+	bottom:20px;
+	height:300px;
+	display:block;
+	border:solid;
+	border-color:#000000;
+	background-color:white;
+	border-radius:10px;
+	border-width:1px;
+}
+
+.artist_block_picture_inner{
+	object-fit:cover;
+	position:absolute;
+	height:100%;
+	width:100%;
+	background-color:white;
+	border-radius:10px;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

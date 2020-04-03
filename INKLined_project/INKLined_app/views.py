@@ -148,6 +148,25 @@ def sign_up(request):
 
     return render(request, 'INKLined_app/sign-up.html', context=context_dict)
 
+def delete_account(request):
+    if request.user.is_authenticated:
+        USERNAME = request.user.username
+        USER = request.user
+    else:
+        return redirect(reverse('INKLined_app:login'))
+
+    logout(request)
+    USER.delete()
+    
+    try:
+        customer = Customer.objects.get(USERNAME = USERNAME)
+        customer.delete()
+    except:
+        ARTIST_USERNAME = USERNAME
+        artist = Artist.objects.get(ARTIST_USERNAME = ARTIST_USERNAME)
+        artist.delete()
+
+    return redirect(reverse('INKLined_app:index'))
 
 def artists(request):
     artists = Artist.objects.filter()

@@ -10,7 +10,11 @@
 		<h1>Customer Signup</h1> 
 	</div>
     {% if registered %}
-        <strong>thank you for registering!</strong>
+        <div style="text-align:center">
+			<strong>Thank you for registering!</strong>
+			<br />
+			Log in <a href="{% url 'INKLined_app:login' %}"><b>here</b></a>
+		</div>
     {% else %}
         <form id="customer_form" method="post" action="{% url 'INKLined_app:add_customer' %}" enctype="multipart/form-data">
             {% csrf_token %}

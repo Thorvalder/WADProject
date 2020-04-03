@@ -31,9 +31,9 @@
 								{{ picture.ARTIST.FULL_NAME }}
 							</div>
 							
-
-							<img src="{{ MEDIA_URL }}{{ picture.UPLOADED_IMAGE }}" alt="Sample Picture" class="artist_block_picture" /> 
-
+							<div class="artist_block_picture">
+								<img src="{{ MEDIA_URL }}{{ picture.UPLOADED_IMAGE }}" alt="Sample Picture" class="artist_block_picture_inner" /> 
+							</div>
 						</div>
 					</div>
                 {% endfor %}
